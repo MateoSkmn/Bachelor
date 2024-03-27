@@ -1,6 +1,8 @@
 ### IMPORTS ###
 from flask import Flask, jsonify
 from flask_cors import CORS
+
+import handlers.data_handler as data_handler
 ######
 
 ### SETUP ###
@@ -16,13 +18,13 @@ def base_route():
 
 @app.route('/data/record', methods=['GET'])
 def get_records():
-    return jsonify("Alle Datensätze")
+    return jsonify(data_handler.get_records())
 
 @app.route('/data/model', methods=['GET'])
 def get_models():
-    return jsonify("Alle Modelle")
+    return jsonify(data_handler.get_models())
 
-@app.route('/data/records/<file_name>/<id>/lime', methods=['GET'])
+@app.route('/data/record/<file_name>/<id>/lime', methods=['GET'])
 def get_lime(file_name, id):
     return jsonify("Get LIME values for: " + file_name + "/" + id)
 

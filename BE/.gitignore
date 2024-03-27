@@ -1,0 +1,5 @@
+# Ignore bytecode files
+__pycache__/
+*.pyc
+*csv
+*pkl
