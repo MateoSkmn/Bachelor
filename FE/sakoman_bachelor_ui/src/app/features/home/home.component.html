@@ -1,2 +1,8 @@
 <app-header [index]="0"></app-header>
+<input type="file" #fileInput style="display: none;" (change)="handleFileInput($event)">
+<app-styled-button 
+    icon="add_circle_outline"
+    label="Upload"
+    (clicked)="uploadFile()"
+/>
 <p>home works!</p>

@@ -1,0 +1,18 @@
+@import './../../../assets/project-colors.scss';
+
+button {
+    background-color: $dark-teal;
+    color: white;
+    border: none;
+    align-items: center;
+    justify-content: center;
+    display: inline;
+}
+
+button mat-icon {
+    margin-right: 10px;
+}
+
+.isClosing {
+    background-color: $dark-orange;
+}
