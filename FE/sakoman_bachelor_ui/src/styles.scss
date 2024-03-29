@@ -1,1 +1,21 @@
-/* You can add global styles to this file, and also import other style files */
+@import "./../node_modules/bootstrap/scss/bootstrap";
+
+/*Project Color Palette*/
+$dark_teal: #469597;
+$teal: #5BA199;
+$dark-gray: #BBC6C8;
+$gray: #E5E3E4;
+$dark-orange: #B47954;
+$light-orange: #DDBEAA;
+
+* {
+    font-family: Helvetica, sans-serif;
+    font-weight: 600;
+}
+
+hr {
+    background-color: $dark_teal;
+    height: 3px;
+    border: none;
+    margin: 10px 40px
+}

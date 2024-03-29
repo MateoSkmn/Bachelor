@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
+import { HeaderComponent } from '../../global/header/header.component';
 
 @Component({
   selector: 'app-page-not-found',
   standalone: true,
-  imports: [],
+  imports: [HeaderComponent],
   templateUrl: './page-not-found.component.html',
   styleUrl: './page-not-found.component.scss'
 })

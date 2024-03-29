@@ -1,0 +1,37 @@
+@import '../../../styles.scss';
+
+header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: $teal;
+    text-align: center;
+    height: 93px;
+    width: 100vw;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+a {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    height: 100%;
+    //width: 20%;
+    border-left: 5px solid $dark_teal;
+    text-decoration: none;
+}
+
+a:last-child {
+    border-right: 5px solid $dark_teal;
+}
+
+a:hover {
+    cursor: pointer;
+    background-color: $dark_teal;
+}
+
+.activePage {
+    background-color: $dark_teal;
+    color: $gray;
+}

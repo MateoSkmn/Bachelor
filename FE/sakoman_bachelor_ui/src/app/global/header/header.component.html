@@ -1,0 +1,5 @@
+<header class="col-12">
+    @for(link of links; track $index) {
+        <a [href]="link.url" [class.activePage]="index === $index" class="col-3">{{ link.label }}</a>
+    }
+</header>
