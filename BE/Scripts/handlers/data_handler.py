@@ -1,6 +1,8 @@
 ### IMPORTS ###
 import os
 import pandas as pd
+
+from helper.response import Response
 ######
 
 # VARIABLES
@@ -26,6 +28,20 @@ def get_models():
         model_list.append({"file_name": file_name, "record_name": record_name})
     
     return model_list
+
+def delete_file(directory, filename):
+    # Delete a file in a given directory
+    file_path = os.path.join(directory, filename)
+    # TODO: Return Response object {success: bool, error_code: int, message: string}
+    try:
+        os.remove(file_path)
+        return Response(True, None, f"{filename} has been deleted successfully.")
+    except FileNotFoundError:
+        return Response(False, 404, f"File {filename} not found in directory {directory}.")
+    except PermissionError:
+        return Response(False, 403, f"Permission denied to delete {filename}.")
+    except Exception as e:
+        return Response(False, 400, f"An error occurred: {e}")
 
 ### HELPER ###
 def __allFileNamesSorted(directory) -> list:

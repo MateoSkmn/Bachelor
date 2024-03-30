@@ -1,5 +1,5 @@
 ### IMPORTS ###
-from flask import Flask, jsonify
+from flask import Flask, jsonify, abort
 from flask_cors import CORS
 
 import handlers.data_handler as data_handler
@@ -48,11 +48,17 @@ def upload_user_info_evaluation(file_name):
 # DELETE
 @app.route('/data/record/<file_name>', methods=['DELETE'])
 def delete_record(file_name):
-    return jsonify("Delete Record: " +  file_name)
+    reponse = data_handler.delete_file('BE/data/record', file_name)
+    if reponse.success == False:
+        abort(reponse.error_code, reponse.message)
+    return jsonify(reponse.__dict__)
 
 @app.route('/data/model/<file_name>', methods=['DELETE'])
 def delete_model(file_name):
-    return jsonify("Delete Model: " +  file_name)
+    reponse = data_handler.delete_file('BE/data/model', file_name)
+    if reponse.success == False:
+        abort(reponse.error_code, reponse.message)
+    return jsonify(reponse.__dict__)
 ######
 
 if __name__ == '__main__':

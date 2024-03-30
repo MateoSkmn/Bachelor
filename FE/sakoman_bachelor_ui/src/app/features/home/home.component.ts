@@ -57,6 +57,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.uploadSubscription = this.apiService.postRecord(formData).subscribe({
       next: (response) => {
         console.log(response);
+        window.location.reload();
       },
       error: (error) => {
         this.error = error;
