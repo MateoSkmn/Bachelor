@@ -48,17 +48,17 @@ def upload_user_info_evaluation(file_name):
 # DELETE
 @app.route('/data/record/<file_name>', methods=['DELETE'])
 def delete_record(file_name):
-    reponse = data_handler.delete_file('BE/data/record', file_name)
-    if reponse.success == False:
-        abort(reponse.error_code, reponse.message)
-    return jsonify(reponse.__dict__)
+    response = data_handler.delete_file('BE/data/record', file_name)
+    if response.success == False:
+        abort(response.error_code, response.message)
+    return jsonify(response.__dict__), response.error_code
 
 @app.route('/data/model/<file_name>', methods=['DELETE'])
 def delete_model(file_name):
-    reponse = data_handler.delete_file('BE/data/model', file_name)
-    if reponse.success == False:
-        abort(reponse.error_code, reponse.message)
-    return jsonify(reponse.__dict__)
+    response = data_handler.delete_file('BE/data/model', file_name)
+    if response.success == False:
+        abort(response.error_code, response.message)
+    return jsonify(response.__dict__), response.error_code
 ######
 
 if __name__ == '__main__':

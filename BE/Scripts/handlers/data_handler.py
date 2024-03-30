@@ -32,7 +32,7 @@ def get_models():
 def delete_file(directory, filename):
     # Delete a file in a given directory
     file_path = os.path.join(directory, filename)
-    # TODO: Return Response object {success: bool, error_code: int, message: string}
+
     try:
         os.remove(file_path)
         return Response(True, None, f"{filename} has been deleted successfully.")

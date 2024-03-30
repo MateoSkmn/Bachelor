@@ -1,1 +1,7 @@
 <router-outlet></router-outlet>
+
+@if (response && response.length > 0) {
+    @for (item of response; track item) {
+        <app-notification [response]="item"></app-notification>
+    }
+}

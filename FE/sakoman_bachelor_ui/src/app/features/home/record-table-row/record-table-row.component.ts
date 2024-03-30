@@ -3,6 +3,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { ApiService } from '../../../global/service/api.service';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { ErrorService } from '../../../global/service/error.service';
 
 @Component({
   selector: 'app-record-table-row',
@@ -19,7 +20,7 @@ export class RecordTableRowComponent implements OnDestroy {
 
   private deleteSubscription!: Subscription;
 
-  constructor(private apiService: ApiService, private router: Router) {}
+  constructor(private apiService: ApiService, private router: Router, private errorService: ErrorService) {}
 
   ngOnDestroy(): void {
     if (this.deleteSubscription) {
@@ -34,7 +35,7 @@ export class RecordTableRowComponent implements OnDestroy {
         window.location.reload();
       },
       error: (error) => {
-        console.error('Error:', error);
+        this.errorService.triggerError(error);
       }
     });
   }

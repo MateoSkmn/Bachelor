@@ -5,6 +5,7 @@ import { ApiService } from '../../global/service/api.service';
 import { Subscription } from 'rxjs';
 import { RecordListItem } from '../../global/interfaces/record-list-item.interface';
 import { RecordTableRowComponent } from './record-table-row/record-table-row.component';
+import { ErrorService } from '../../global/service/error.service';
 
 @Component({
   selector: 'app-home',
@@ -21,9 +22,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   private uploadSubscription!: Subscription;
 
   recordList: RecordListItem[] = [];
-  error: string = "";
 
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService, private errorService: ErrorService) {}
 
   ngOnInit(): void {
     this.recordListSubscription = this.apiService.getRecords().subscribe({
@@ -31,7 +31,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.recordList = response;
       },
       error: (error) => {
-        this.error = error;
+        this.errorService.triggerError(error);
       }
     });
   }
@@ -60,7 +60,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         window.location.reload();
       },
       error: (error) => {
-        this.error = error;
+        this.errorService.triggerError(error);
       }
     });
   }

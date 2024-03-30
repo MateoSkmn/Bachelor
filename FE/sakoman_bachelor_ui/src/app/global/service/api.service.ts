@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
 import { RecordListItem } from '../interfaces/record-list-item.interface';
 import { ModelListItem } from '../interfaces/model-list-item.interface';
+import { Response } from '../interfaces/response.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,7 @@ export class ApiService {
     const url = `${this.BASE_URL}/data/record`;
     return this.http.get<RecordListItem[]>(url).pipe(
       catchError((error) => {
-        return throwError(() => 'FEHLER: Daten konnten nicht geladen werden!');
+        return throwError(() => error);
       })
     );
   }
@@ -28,7 +29,7 @@ export class ApiService {
     const url = `${this.BASE_URL}/data/model`;
     return this.http.get<ModelListItem[]>(url).pipe(
       catchError((error) => {
-        return throwError(() => 'FEHLER: Daten konnten nicht geladen werden!');
+        return throwError(() => error);
       })
     );
   }
@@ -37,7 +38,7 @@ export class ApiService {
     const url = `${this.BASE_URL}/data/record`;
     return this.http.post<any>(url, body).pipe(
       catchError((error) => {
-        return throwError(() => 'FEHLER: Datei konnte nicht hochgeladen werden!');
+        return throwError(() => error);
       })
     );
   }
@@ -46,25 +47,25 @@ export class ApiService {
     const url = `${this.BASE_URL}/data/model`;
     return this.http.post<any>(url, body).pipe(
       catchError((error) => {
-        return throwError(() => 'FEHLER: Datei konnte nicht hochgeladen werden!');
+        return throwError(() => error);
       })
     );
   }
 
-  deleteRecord(file_name: string): Observable<any> {
+  deleteRecord(file_name: string): Observable<Response> {
     const url = `${this.BASE_URL}/data/record/${file_name}`;
-    return this.http.delete<any>(url).pipe(
+    return this.http.delete<Response>(url).pipe(
       catchError((error) => {
-        return throwError(() => 'FEHLER: Datei konnte nicht gelöscht werden!');
+        return throwError(() => error);
       })
     )
   }
 
-  deleteModel(): Observable<any> {
+  deleteModel(): Observable<Response> {
     const url = `${this.BASE_URL}/data/model`;
-    return this.http.delete<any>(url).pipe(
+    return this.http.delete<Response>(url).pipe(
       catchError((error) => {
-        return throwError(() => 'FEHLER: Datei konnte nicht gelöscht werden!');
+        return throwError(() => error);
       })
     )
   }
