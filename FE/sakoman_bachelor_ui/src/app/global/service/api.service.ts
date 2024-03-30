@@ -19,8 +19,7 @@ export class ApiService {
     const url = `${this.BASE_URL}/data/record`;
     return this.http.get<RecordListItem[]>(url).pipe(
       catchError((error) => {
-        console.error('Error fetching data:', error);
-        return throwError(() => 'Something went wrong, please try again later.');
+        return throwError(() => 'FEHLER: Daten konnten nicht geladen werden!');
       })
     );
   }
@@ -29,8 +28,7 @@ export class ApiService {
     const url = `${this.BASE_URL}/data/model`;
     return this.http.get<ModelListItem[]>(url).pipe(
       catchError((error) => {
-        console.error('Error fetching data:', error);
-        return throwError(() => 'Something went wrong, please try again later.');
+        return throwError(() => 'FEHLER: Daten konnten nicht geladen werden!');
       })
     );
   }
@@ -39,8 +37,7 @@ export class ApiService {
     const url = `${this.BASE_URL}/data/record`;
     return this.http.post<any>(url, body).pipe(
       catchError((error) => {
-        console.error('Error uplaoding file:', error);
-        return throwError(() => 'Something went wrong, please try again later.');
+        return throwError(() => 'FEHLER: Datei konnte nicht hochgeladen werden!');
       })
     );
   }
@@ -49,9 +46,26 @@ export class ApiService {
     const url = `${this.BASE_URL}/data/model`;
     return this.http.post<any>(url, body).pipe(
       catchError((error) => {
-        console.error('Error uploading file:', error);
-        return throwError(() => 'Something went wrong, please try again later.');
+        return throwError(() => 'FEHLER: Datei konnte nicht hochgeladen werden!');
       })
     );
+  }
+
+  deleteRecord(file_name: string): Observable<any> {
+    const url = `${this.BASE_URL}/data/record/${file_name}`;
+    return this.http.delete<any>(url).pipe(
+      catchError((error) => {
+        return throwError(() => 'FEHLER: Datei konnte nicht gelöscht werden!');
+      })
+    )
+  }
+
+  deleteModel(): Observable<any> {
+    const url = `${this.BASE_URL}/data/model`;
+    return this.http.delete<any>(url).pipe(
+      catchError((error) => {
+        return throwError(() => 'FEHLER: Datei konnte nicht gelöscht werden!');
+      })
+    )
   }
 }

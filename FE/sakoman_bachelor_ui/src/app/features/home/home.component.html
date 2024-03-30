@@ -1,8 +1,38 @@
 <app-header [index]="0"></app-header>
 <input type="file" #fileInput style="display: none;" (change)="handleFileInput($event)">
+
 <app-styled-button 
-    icon="add_circle_outline"
-    label="Upload"
-    (clicked)="uploadFile()"
+class="justify-content-end d-flex"
+icon="add_circle_outline"
+label="Upload"
+(clicked)="uploadFile()"
 />
-<p>home works!</p>
+@if (recordList && recordList.length > 0) {
+    <div class="table-header">
+        <div class="col-12 d-flex align-items-center">
+            <div class="id-column">ID</div>
+            <div class="col-8">Dateiname</div>
+            <div class="col-2">Trainiert</div>
+        </div>
+    </div>
+    @for (item of recordList; track item;) {
+        <app-record-table-row
+        [fileName]="item.file_name" 
+        [fileIndex]="$index + 1"
+        [isTrained]="item.hasModel"></app-record-table-row>
+    }
+    <app-styled-button 
+        class="justify-content-end d-flex"
+        icon="add_circle_outline"
+        label="Upload"
+        (clicked)="uploadFile()"
+    />
+}
+@else {
+    <div class="d-flex justify-content-center">KEINE DATEN GEFUNDEN</div>
+}
+@if (error) {
+    <div class=" d-flex justify-content-center text-danger">
+        {{ error }}
+    </div>
+}

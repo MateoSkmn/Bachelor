@@ -4,11 +4,12 @@ import { StyledButtonComponent } from '../../global/components/styled-button/sty
 import { ApiService } from '../../global/service/api.service';
 import { Subscription } from 'rxjs';
 import { RecordListItem } from '../../global/interfaces/record-list-item.interface';
+import { RecordTableRowComponent } from './record-table-row/record-table-row.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [HeaderComponent, StyledButtonComponent],
+  imports: [HeaderComponent, StyledButtonComponent, RecordTableRowComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
@@ -20,6 +21,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private uploadSubscription!: Subscription;
 
   recordList: RecordListItem[] = [];
+  error: string = "";
 
   constructor(private apiService: ApiService) {}
 
@@ -29,7 +31,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.recordList = response;
       },
       error: (error) => {
-        console.error('Error:', error);
+        this.error = error;
       }
     });
   }
@@ -57,7 +59,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         console.log(response);
       },
       error: (error) => {
-        console.error('Error:', error);
+        this.error = error;
       }
     });
   }

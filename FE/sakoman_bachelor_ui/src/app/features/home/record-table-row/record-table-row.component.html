@@ -1,0 +1,16 @@
+<div class="file-container d-flex align-items-center">
+    <div class="d-flex align-items-center col-12">
+        <p class="index">{{ fileIndex }}</p>
+        <div class="separator"></div>
+        <div class="col-8 text-truncate">{{ fileName }}</div>
+        @if (isTrained) {
+            <mat-icon class="icon text-success">check_circle</mat-icon>
+        }
+        @else {
+            <mat-icon class="icon text-danger">cancel_cirlce</mat-icon>
+        }
+        <button class="delete-btn" (click)="deleteFile()">
+            <mat-icon class="icon text-danger">delete</mat-icon>
+        </button>
+    </div>
+</div>
