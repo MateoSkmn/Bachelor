@@ -31,11 +31,17 @@ def get_lime(file_name, id):
 # POST
 @app.route('/data/record', methods=['POST'])
 def upload_record():
-    return jsonify("Upload Record")
+    response = data_handler.upload_file(app, "../data/record")
+    if response.success == False:
+        abort(response.code, response.message)
+    return jsonify(response.__dict__), response.code
 
 @app.route('/data/model', methods=['POST'])
 def upload_model():
-    return jsonify("Upload Model")
+    response = data_handler.upload_file(app, "../data/model")
+    if response.success == False:
+        abort(response.code, response.message)
+    return jsonify(response.__dict__), response.code
 
 @app.route('/data/user-info/connection', methods=['POST'])
 def upload_user_info_connection():
@@ -50,15 +56,15 @@ def upload_user_info_evaluation(file_name):
 def delete_record(file_name):
     response = data_handler.delete_file('BE/data/record', file_name)
     if response.success == False:
-        abort(response.error_code, response.message)
-    return jsonify(response.__dict__), response.error_code
+        abort(response.code, response.message)
+    return jsonify(response.__dict__), response.code
 
 @app.route('/data/model/<file_name>', methods=['DELETE'])
 def delete_model(file_name):
     response = data_handler.delete_file('BE/data/model', file_name)
     if response.success == False:
-        abort(response.error_code, response.message)
-    return jsonify(response.__dict__), response.error_code
+        abort(response.code, response.message)
+    return jsonify(response.__dict__), response.code
 ######
 
 if __name__ == '__main__':

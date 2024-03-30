@@ -31,7 +31,6 @@ export class RecordTableRowComponent implements OnDestroy {
   deleteFile(): void {
     this.deleteSubscription = this.apiService.deleteRecord(this.fileName).subscribe({
       next: (response) => {
-        console.log(response);
         window.location.reload();
       },
       error: (error) => {
