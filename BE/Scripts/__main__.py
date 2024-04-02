@@ -3,6 +3,7 @@ from flask import Flask, jsonify, abort
 from flask_cors import CORS
 
 import handlers.data_handler as data_handler
+import handlers.file_handler as file_handler
 ######
 
 ### SETUP ###
@@ -31,14 +32,14 @@ def get_lime(file_name, id):
 # POST
 @app.route('/data/record', methods=['POST'])
 def upload_record():
-    response = data_handler.upload_file(app, "../data/record")
+    response = file_handler.upload_file(app, "../data/record")
     if response.success == False:
         abort(response.code, response.message)
     return jsonify(response.__dict__), response.code
 
 @app.route('/data/model', methods=['POST'])
 def upload_model():
-    response = data_handler.upload_file(app, "../data/model")
+    response = file_handler.upload_file(app, "../data/model")
     if response.success == False:
         abort(response.code, response.message)
     return jsonify(response.__dict__), response.code
@@ -54,14 +55,14 @@ def upload_user_info_evaluation(file_name):
 # DELETE
 @app.route('/data/record/<file_name>', methods=['DELETE'])
 def delete_record(file_name):
-    response = data_handler.delete_file('BE/data/record', file_name)
+    response = file_handler.delete_file('BE/data/record', file_name)
     if response.success == False:
         abort(response.code, response.message)
     return jsonify(response.__dict__), response.code
 
 @app.route('/data/model/<file_name>', methods=['DELETE'])
 def delete_model(file_name):
-    response = data_handler.delete_file('BE/data/model', file_name)
+    response = file_handler.delete_file('BE/data/model', file_name)
     if response.success == False:
         abort(response.code, response.message)
     return jsonify(response.__dict__), response.code
