@@ -28,15 +28,22 @@ def get_models():
 
 def get_model_by_record_connection(record: str) -> str:
     connections_df = pd.read_csv('BE/data/userInfo/connections.csv')
-    model = connections_df[connections_df['record'] == record]['model'].iloc[0]
-    return model
+    filtered_df = connections_df[connections_df['record'] == record]['model']
+
+    if not filtered_df.empty:
+        return filtered_df.iloc[0]
+    return None
 
 def get_record_by_model_connection(model: str) -> str:
     connections_df = pd.read_csv('BE/data/userInfo/connections.csv')
-    record = connections_df[connections_df['model'] == model]['record'].iloc[0]
-    return record
+    filtered_df = connections_df[connections_df['model'] == model]['record']
+    
+    if not filtered_df.empty:
+        return filtered_df.iloc[0]
+    return None
 
 def get_user_data(file_name, id):
+    print(get_record_by_model_connection("doesnt exist"))
     path = 'BE/data/userInfo/evaluation/' + file_name
     evaluation_df = pd.read_csv(path)
     filtered_df = evaluation_df[evaluation_df['id'] == int(id)]

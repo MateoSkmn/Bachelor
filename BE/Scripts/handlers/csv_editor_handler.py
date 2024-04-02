@@ -1,4 +1,5 @@
 import csv
+from helper.response import Response
 
 def find_csv_line_index(file_path, search_value):
     """
@@ -97,10 +98,9 @@ def add_csv_line(file_path, data):
         with open(file_path, 'a', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(data)
-        return True
+        return Response(True, 200, "Added line to csv")
     except IOError:
-        print("Error: File not found or unable to read/write.")
-        return False
+        return Response(True, 400, "Error: File not found or unable to read/write.")
 
 def remove_csv_line(file_path, search_value):
     """
@@ -152,6 +152,36 @@ def remove_csv_line_by_index(file_path, line_index):
         else:
             print("Line index is out of range.")
             return False
+    except IOError:
+        print("Error: File not found or unable to read/write.")
+        return False
+    
+def clear_csv(file_path):
+    """
+    Delete all entries in a CSV file except the header
+
+    Parameters:
+        file_path (str): The path to the CSV file.
+        line_index (int): The index of the line to remove (0-indexed).
+
+    Returns:
+        bool: True if the removal was successful, False otherwise.
+    """
+    try:
+        # Read the existing CSV file
+        with open(file_path, 'r', newline='') as file:
+            lines = list(csv.reader(file))
+        
+        # Remove all lines except at index 0
+        lines = [lines[0]]
+
+        # Write the updated data back to the CSV file
+        with open(file_path, 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerows(lines)
+
+        return True
+
     except IOError:
         print("Error: File not found or unable to read/write.")
         return False

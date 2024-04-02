@@ -3,6 +3,7 @@ import os
 from flask import request
 from helper.response import Response
 import handlers.csv_editor_handler as csv_editor
+import handlers.data_handler as data_handler
 ######
 
 def delete_file(directory, filename):
@@ -15,7 +16,9 @@ def delete_file(directory, filename):
             os.remove('BE/Data/UserInfo/Evaluation/' + filename + '.csv')
             csv_editor.remove_csv_line('BE/Data/UserInfo/connections.csv', dict(index=0, value=filename))
         elif directory == 'BE/data/model':
-            #TODO: Clear evaluation file after deleting model
+            record_name = data_handler.get_record_by_model_connection(filename)
+            evaluation_path = 'BE/Data/UserInfo/Evaluation/' + record_name + '.csv'
+            csv_editor.clear_csv(evaluation_path)
             csv_editor.remove_csv_line('BE/Data/UserInfo/connections.csv', dict(index=1, value=filename))
         return Response(True, 200, f"{filename} has been deleted successfully.")
     except FileNotFoundError:

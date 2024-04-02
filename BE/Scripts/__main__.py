@@ -58,9 +58,11 @@ def upload_user_info_connection():
 def upload_user_info_evaluation(file_name):
     data = request.json
     path = "BE/Data/UserInfo/Evaluation/" + file_name + ".csv"
-    csv_editor.add_csv_line(path, data)
-    #TODO: RETURN
-    return jsonify("Upload Evaluation for " + file_name)
+    response = csv_editor.add_csv_line(path, data)
+
+    if response.success == True:
+        return jsonify(response.__dict__)
+    abort(response.code, response.message)
 
 # DELETE
 @app.route('/data/record/<file_name>', methods=['DELETE'])
