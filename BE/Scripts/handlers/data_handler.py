@@ -3,16 +3,14 @@ import os
 import pandas as pd
 ######
 
-# VARIABLES
-# TODO: create file if it doesnt exist
-__connections_df = pd.read_csv('BE/data/userInfo/connections.csv')
-######
+# TODO: create connection file if it doesnt exist
 
 def get_records():
     # Return all the record names and if they have a model
     record_list = []
+    connections_df = pd.read_csv('BE/data/userInfo/connections.csv')
     for file_name in __allFileNamesSorted('BE/data/record'):
-        hasModel = file_name in __connections_df['record'].values
+        hasModel = file_name in connections_df['record'].values
         record_list.append({"file_name": file_name, "hasModel": hasModel})
         
     return record_list
@@ -20,12 +18,37 @@ def get_records():
 def get_models():
     # Return all the models and their corresponding record
     model_list = []
+    connections_df = pd.read_csv('BE/data/userInfo/connections.csv')
     for file_name in __allFileNamesSorted('BE/data/model'):
-        record = __connections_df.loc[__connections_df['model'] == file_name, 'record'].values
+        record = connections_df.loc[connections_df['model'] == file_name, 'record'].values
         record_name = record[0] if len(record) > 0 else None
         model_list.append({"file_name": file_name, "record_name": record_name})
     
     return model_list
+
+def get_model_by_record_connection(record: str) -> str:
+    connections_df = pd.read_csv('BE/data/userInfo/connections.csv')
+    model = connections_df[connections_df['record'] == record]['model'].iloc[0]
+    return model
+
+def get_record_by_model_connection(model: str) -> str:
+    connections_df = pd.read_csv('BE/data/userInfo/connections.csv')
+    record = connections_df[connections_df['model'] == model]['record'].iloc[0]
+    return record
+
+def get_user_data(file_name, id):
+    path = 'BE/data/userInfo/evaluation/' + file_name
+    evaluation_df = pd.read_csv(path)
+    filtered_df = evaluation_df[evaluation_df['id'] == int(id)]
+
+    if not filtered_df.empty:
+        # Extract the second and third values of the first matching row
+        understandable = int(filtered_df.iloc[0, 1])
+        prediction = int(filtered_df.iloc[0, 2])
+        print(understandable, prediction)
+        return understandable, prediction
+    else:
+        return None, None
 
 ### HELPER ###
 def __allFileNamesSorted(directory) -> list:

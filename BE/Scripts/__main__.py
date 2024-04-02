@@ -5,6 +5,7 @@ from flask_cors import CORS
 import handlers.data_handler as data_handler
 import handlers.file_handler as file_handler
 import handlers.csv_editor_handler as csv_editor
+import handlers.lime_handler as lime_handler
 ######
 
 ### SETUP ###
@@ -29,7 +30,7 @@ def get_models():
 
 @app.route('/data/record/<file_name>/<id>/lime', methods=['GET'])
 def get_lime(file_name, id):
-    return jsonify("Get LIME values for: " + file_name + "/" + id)
+    return lime_handler.explanation(file_name, id)
 
 # POST
 @app.route('/data/record', methods=['POST'])
