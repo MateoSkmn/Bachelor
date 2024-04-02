@@ -1,14 +1,16 @@
 ### IMPORTS ###
-from flask import Flask, jsonify, abort
+from flask import Flask, jsonify, abort, request
 from flask_cors import CORS
 
 import handlers.data_handler as data_handler
 import handlers.file_handler as file_handler
+import handlers.csv_editor_handler as csv_editor
 ######
 
 ### SETUP ###
 app = Flask(__name__)
 CORS(app, origins=['http://localhost:4200', 'http://localhost:4200/*'])
+#TODO: Check for '' and ""
 ######
 
 ### ROUTES ###
@@ -46,10 +48,17 @@ def upload_model():
 
 @app.route('/data/user-info/connection', methods=['POST'])
 def upload_user_info_connection():
+    data = request.json
+    csv_editor.add_csv_line("BE/Data/UserInfo/connections.csv", data)
+    #TODO: Überdenken!!
     return jsonify("Upload Connection")
 
 @app.route('/data/user-info/evaluation/<file_name>', methods=['POST'])
 def upload_user_info_evaluation(file_name):
+    data = request.json
+    path = "BE/Data/UserInfo/Evaluation/" + file_name + ".csv"
+    csv_editor.add_csv_line(path, data)
+    #TODO: RETURN
     return jsonify("Upload Evaluation for " + file_name)
 
 # DELETE
