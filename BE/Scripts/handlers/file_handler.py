@@ -52,3 +52,19 @@ def upload_file(app, folder):
         csv_editor.add_csv_line(path, header)
 
     return Response(True, 200, 'File uploaded successfully')
+
+def edit_connection(data):
+    path = "BE/Data/UserInfo/connections.csv"
+    search_value = {"index": 0, "value": data[0]}
+    # data in format [string, string]
+    if len(data) != 2:
+        return Response(400, "Connection needs exactly 2 values!")
+    # Delete line when no connection is set
+    if data[1] == "":
+        return csv_editor.remove_csv_line(path, search_value)
+    # Edit line if record has changed
+    response = csv_editor.edit_csv_line(path, search_value, data)
+    if response.success == True:
+        return response
+    response = csv_editor.add_csv_line(path, data)
+    return response

@@ -1,5 +1,7 @@
+### IMPORTS ###
 import csv
 from helper.response import Response
+######
 
 def find_csv_line_index(file_path, search_value):
     """
@@ -44,8 +46,7 @@ def edit_csv_line(file_path, search_value, new_data):
     if line_index != -1:
         return edit_csv_line_by_index(file_path, line_index, new_data)
     else:
-        print("Line with specified values not found.")
-        return False
+        return Response(False, 404, "Line with specified values not found.")
 
 def edit_csv_line_by_index(file_path, line_index, new_data):
     """
@@ -74,13 +75,21 @@ def edit_csv_line_by_index(file_path, line_index, new_data):
                 writer = csv.writer(file)
                 writer.writerows(lines)
 
-            return True
+            return Response(True, 200, "Connection edited.")
         else:
-            print("Line index is out of range.")
-            return False
+            return Response(False, 400, "Line index is out of range.")
+    except FileNotFoundError:
+        print("Error: File not found.")
+        return Response(False, 404, "File not found.")
+    except PermissionError:
+        print("Error: Permission denied to read/write the file.")
+        return Response(False, 403, "Permission denied to read/write the file.")
     except IOError:
-        print("Error: File not found or unable to read/write.")
-        return False
+        print("Error: Unable to read/write the file.")
+        return Response(False, 500, "Unable to read/write the file.")
+    except Exception as e:
+        print(f"Error: {e}")
+        return Response(False, 500, "An unexpected error occurred.")
 
 def add_csv_line(file_path, data):
     """
@@ -119,8 +128,7 @@ def remove_csv_line(file_path, search_value):
     if line_index != -1:
         return remove_csv_line_by_index(file_path, line_index)
     else:
-        print("Line with specified values not found.")
-        return False
+        return Response(False, 404, "Line with specified values not found.")
 
 def remove_csv_line_by_index(file_path, line_index):
     """
@@ -148,13 +156,11 @@ def remove_csv_line_by_index(file_path, line_index):
                 writer = csv.writer(file)
                 writer.writerows(lines)
 
-            return True
+            return Response(True, 200, "Connection deleted.")
         else:
-            print("Line index is out of range.")
-            return False
+            return Response(True, 400, "Line index is out of range.")
     except IOError:
-        print("Error: File not found or unable to read/write.")
-        return False
+        return Response(True, 400, "Error: File not found or unable to read/write.")
     
 def clear_csv(file_path):
     """

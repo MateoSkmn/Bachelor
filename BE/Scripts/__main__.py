@@ -49,10 +49,10 @@ def upload_model():
 
 @app.route('/data/user-info/connection', methods=['POST'])
 def upload_user_info_connection():
-    data = request.json
-    csv_editor.add_csv_line("BE/Data/UserInfo/connections.csv", data)
-    #TODO: Überdenken!!
-    return jsonify("Upload Connection")
+    response = file_handler.edit_connection(request.json)
+    if response.success == True:
+        return jsonify(response.__dict__)
+    abort(response.code, response.message)
 
 @app.route('/data/user-info/evaluation/<file_name>', methods=['POST'])
 def upload_user_info_evaluation(file_name):

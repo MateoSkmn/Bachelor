@@ -61,6 +61,15 @@ export class ApiService {
     )
   }
 
+  postConnection(body: string[]): Observable<any> {
+    const url = `${this.BASE_URL}/data/user-info/connection`;
+    return this.http.post<any>(url, body).pipe(
+      catchError((error) => {
+        return throwError(() => error);
+      })
+    )
+  }
+
   deleteRecord(file_name: string): Observable<Response> {
     const url = `${this.BASE_URL}/data/record/${file_name}`;
     return this.http.delete<Response>(url).pipe(
