@@ -1,2 +1,25 @@
 <app-header [index]="2"></app-header>
-<p>lime works!</p>
+
+<label for="randomSelect">Datensatz:</label>
+<select id="randomSelect" [(ngModel)]="recordName" (ngModelChange)="onSelectChange($event)">
+    @if (!recordList || recordList.length == 0) {
+        <option value="empty">Leer</option>
+    }
+    @for (item of recordList; track item;) {
+        <option (value)="item.file_name">{{ item.file_name }}</option>
+    }
+</select>
+
+<label for="numberInput">Index:</label>
+<input type="number" id="numberInput" name="numberInput" min="0" [(ngModel)]="recordIndex" (ngModelChange)="onIndexChange()">
+
+<app-styled-button icon="casino" label="Zufällig" (click)="randomIndex()"></app-styled-button>
+<hr/>
+@if (!recordList || recordList.length == 0) {
+    <p>Keine Analyse verfügbar</p>
+} @else {
+    <div class="col-12 d-flex justify-content-center">
+        <div class="col-10" id="textContainer" [innerHTML]="formattedText"></div>
+    </div>
+}
+<hr/>

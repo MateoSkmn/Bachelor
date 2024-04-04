@@ -34,6 +34,15 @@ export class ApiService {
     );
   }
 
+  getLime(file_name: string, id: number): Observable<any> {
+    const url = `${this.BASE_URL}/data/record/${file_name}/${id}/lime`;
+    return this.http.get<any>(url).pipe(
+      catchError((error) => {
+        return throwError(() => error);
+      })
+    )
+  }
+
   postRecord(body: FormData): Observable<any> {
     const url = `${this.BASE_URL}/data/record`;
     return this.http.post<any>(url, body).pipe(
