@@ -11,9 +11,10 @@
 </select>
 
 <label for="numberInput">Index:</label>
-<input type="number" id="numberInput" name="numberInput" min="0" [(ngModel)]="recordIndex" (ngModelChange)="onIndexChange()">
+<input type="number" id="numberInput" name="numberInput" min="0" (max)="maxIndex" [(ngModel)]="recordIndex" (ngModelChange)="onIndexChange()">
 
 <app-styled-button icon="casino" label="Zufällig" (click)="randomIndex()"></app-styled-button>
+<app-styled-button icon="visibility" label="Legende" (click)="openLegende()"></app-styled-button>
 <hr/>
 @if (!recordList || recordList.length == 0) {
     <p>Keine Analyse verfügbar</p>
@@ -23,3 +24,29 @@
     </div>
 }
 <hr/>
+<div>
+    <div>
+        Wie verständlich ist die Erklärung?
+        <app-star-evaluation></app-star-evaluation>
+    </div>
+    <div>
+        Welche Bewertung erwarten Sie?
+        <app-star-evaluation></app-star-evaluation>
+    </div>
+    <app-styled-button icon="save" label="Speichern" (click)="saveEvaluation()"></app-styled-button>
+</div>
+<hr/>
+<div>
+    <div>
+        Echte Bewertung:
+        <app-star-evaluation [filledStars]="3" [isInteractable]="false"></app-star-evaluation>
+    </div>
+    <div>
+        Modell Vorhersage:
+        <app-star-evaluation [filledStars]="2" [isInteractable]="false"></app-star-evaluation>
+    </div>
+    <div>
+        LIME Vorhersage:
+        <app-star-evaluation [filledStars]="1" [isInteractable]="false"></app-star-evaluation>
+    </div>
+</div>

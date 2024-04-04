@@ -34,6 +34,7 @@ def explanation(file_name, id):
     all_values = [exp.as_list(label=label) for label in range(5)]
     model_prediction_label = int(loaded_model.predict([text])[0])
     lime_prediction_label = int(class_names[np.argmax(exp.predict_proba)])
+    max_index = len(X_test) - 1
 
     word_info_list = __calculate_lime_alpha_values(all_values)
 
@@ -44,7 +45,8 @@ def explanation(file_name, id):
         "model_predicted_label": model_prediction_label,
         "lime_predicted_label": lime_prediction_label,
         "user_predicted_label": prediction,
-        "user_understandable": understandable
+        "user_understandable": understandable,
+        "max_index": max_index
     }
 
     return response_data

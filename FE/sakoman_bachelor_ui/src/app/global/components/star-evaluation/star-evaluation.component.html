@@ -1,0 +1,9 @@
+<div [class.interactable]="isInteractable">
+    @for (item of stars; track $index;) {
+        @if (filledStars > $index) {
+            <mat-icon class="star" (click)="clickStar($index)">star</mat-icon>
+        } @else {
+            <mat-icon class="star" (click)="clickStar($index)">star_outline</mat-icon>
+        }
+    }
+</div>

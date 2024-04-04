@@ -7,17 +7,19 @@ import { ApiService } from '../../global/service/api.service';
 import { RecordListItem } from '../../global/interfaces/record-list-item.interface';
 import { ErrorService } from '../../global/service/error.service';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { StarEvaluationComponent } from '../../global/components/star-evaluation/star-evaluation.component';
 
 @Component({
   selector: 'app-lime',
   standalone: true,
-  imports: [HeaderComponent, StyledButtonComponent, FormsModule],
+  imports: [HeaderComponent, StyledButtonComponent, FormsModule, StarEvaluationComponent],
   templateUrl: './lime.component.html',
   styleUrl: './lime.component.scss'
 })
 export class LimeComponent implements OnInit, OnDestroy{
 
   recordIndex: number = 0;
+  maxIndex: number = Number.MAX_SAFE_INTEGER;
   recordName: string = '';
   recordList: RecordListItem[] = [];
 
@@ -51,6 +53,8 @@ export class LimeComponent implements OnInit, OnDestroy{
         this.recordIndex = 0;
       } else if (this.recordIndex < 0) {
         this.recordIndex *= -1;
+      } else if (this.recordIndex > this.maxIndex) {
+        this.recordIndex = this.maxIndex;
       }
       this.requestLimeExplanation();
     });
@@ -85,12 +89,14 @@ export class LimeComponent implements OnInit, OnDestroy{
   }
 
   requestLimeExplanation() {
+    // TODO: Loading Screen
     console.log("Loading...");
     this.limeExplanationSubscription = this.apiService.getLime(this.recordName, this.recordIndex).subscribe({
       next: (response) => {
         this.formattedText = this.colorWordsBasedOnValues(response.text, response.lime_values);
         console.log("Completed");
         this.setTextAlign();
+        this.maxIndex = response.max_index
       },
       error: (error) => {
         this.formattedText = "";
@@ -109,8 +115,7 @@ export class LimeComponent implements OnInit, OnDestroy{
   }
 
   randomIndex() {
-    console.log("TODO: Get random Index")
-    this.recordIndex = 123;
+    this.recordIndex = Math.floor(Math.random() * (this.maxIndex + 1));
     this.requestLimeExplanation();
   }
 
@@ -142,5 +147,13 @@ export class LimeComponent implements OnInit, OnDestroy{
 
     // Sanitize the HTML content before returning
     return this.sanitizer.bypassSecurityTrustHtml(coloredText);
+  }
+
+  saveEvaluation() {
+    console.log('TODO: SAVE')
+  }
+
+  openLegende() {
+    console.log('Open Legende');
   }
 }
