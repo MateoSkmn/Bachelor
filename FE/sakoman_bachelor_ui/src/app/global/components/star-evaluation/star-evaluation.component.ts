@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
@@ -13,6 +13,8 @@ export class StarEvaluationComponent {
   @Input() isInteractable = true;
   @Input() numberOfStars = 5;
 
+  @Output() filledStarsChanged = new EventEmitter<number>();
+
   stars = Array(this.numberOfStars);
 
   clickStar(index: number) {
@@ -20,5 +22,6 @@ export class StarEvaluationComponent {
       return
     }
     this.filledStars = index + 1;
+    this.filledStarsChanged.emit(this.filledStars);
   }
 }

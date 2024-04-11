@@ -15,7 +15,8 @@ def explanation(file_name, id):
     with open(file_path , 'rb') as f:
         loaded_model: Pipeline = pickle.load(f)
 
-    understandable, prediction = data_handler.get_user_data(file_name, id)
+    evaluation_name = file_name + '.csv'
+    understandable, prediction = data_handler.get_user_data(evaluation_name, id)
 
     record_directory = 'BE/Data/Record/'
 

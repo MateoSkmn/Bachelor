@@ -43,7 +43,6 @@ def get_record_by_model_connection(model: str) -> str:
     return None
 
 def get_user_data(file_name, id):
-    print(get_record_by_model_connection("doesnt exist"))
     path = 'BE/data/userInfo/evaluation/' + file_name
     evaluation_df = pd.read_csv(path)
     filtered_df = evaluation_df[evaluation_df['id'] == int(id)]
@@ -52,7 +51,6 @@ def get_user_data(file_name, id):
         # Extract the second and third values of the first matching row
         understandable = int(filtered_df.iloc[0, 1])
         prediction = int(filtered_df.iloc[0, 2])
-        print(understandable, prediction)
         return understandable, prediction
     else:
         return None, None

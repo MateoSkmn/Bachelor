@@ -61,7 +61,7 @@ export class ApiService {
     );
   }
 
-  postEvaluation(file_name: string, body: string[]): Observable<any> {
+  postEvaluation(file_name: string, body: number[]): Observable<any> {
     const url = `${this.BASE_URL}/data/user-info/evaluation/${file_name}`;
     return this.http.post<any>(url, body).pipe(
       catchError((error) => {

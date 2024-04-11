@@ -25,6 +25,14 @@ export class LimeComponent implements OnInit, OnDestroy{
 
   formattedText: SafeHtml = '';
 
+  isFilledOut: boolean = false;
+  understandable: number = 0;
+  userPrediction: number = 0;
+
+  actualLabel: number = 0;
+  modelPrediction: number = 0;
+  limePrediction: number = 0;
+
   constructor(
     private apiService: ApiService,
     private errorService: ErrorService,
@@ -32,6 +40,7 @@ export class LimeComponent implements OnInit, OnDestroy{
   
   private recordListSubscription!: Subscription;
   private limeExplanationSubscription!: Subscription;
+  private saveUserInfoSubscription!: Subscription;
   private numberValueChangeSubject = new Subject<number>();
 
   ngOnInit(): void {
@@ -67,6 +76,9 @@ export class LimeComponent implements OnInit, OnDestroy{
     if (this.limeExplanationSubscription) {
       this.limeExplanationSubscription.unsubscribe();
     }
+    if (this.saveUserInfoSubscription) {
+      this.saveUserInfoSubscription.unsubscribe();
+    }
   }
 
   setTextAlign(): void {
@@ -97,6 +109,18 @@ export class LimeComponent implements OnInit, OnDestroy{
         console.log("Completed");
         this.setTextAlign();
         this.maxIndex = response.max_index
+
+        if (response.user_predicted_label) {
+          this.isFilledOut = true;
+          this.actualLabel = response.actual_label;
+          this.limePrediction = response.lime_predicted_label;
+          this.modelPrediction = response.model_predicted_label;
+          this.userPrediction = response.user_predicted_label;
+          this.understandable = response.user_understandable;
+        }
+        else {
+          this.isFilledOut = false;
+        }
       },
       error: (error) => {
         this.formattedText = "";
@@ -150,10 +174,26 @@ export class LimeComponent implements OnInit, OnDestroy{
   }
 
   saveEvaluation() {
-    console.log('TODO: SAVE')
+    const body = [this.recordIndex, this.understandable, this.userPrediction];
+    this.saveUserInfoSubscription = this.apiService.postEvaluation(this.recordName, body).subscribe({
+      next: () => {
+        this.requestLimeExplanation();
+      },
+      error: (error) => {
+        this.errorService.triggerError(error);
+      }
+    });
   }
 
   openLegende() {
     console.log('Open Legende');
+  }
+
+  onFilledStarsChange(value: number, isForUnderstandable: boolean) {
+    if (isForUnderstandable) {
+      this.understandable = value;
+      return;
+    }
+    this.userPrediction = value;
   }
 }
