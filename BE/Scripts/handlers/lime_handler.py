@@ -38,16 +38,23 @@ def explanation(file_name, id):
 
     word_info_list = __calculate_lime_alpha_values(all_values)
 
-    response_data = {
-        "text": text,
-        "lime_values": word_info_list,
-        "actual_label": actual_label,
-        "model_predicted_label": model_prediction_label,
-        "lime_predicted_label": lime_prediction_label,
-        "user_predicted_label": prediction,
-        "user_understandable": understandable,
-        "max_index": max_index
-    }
+    if understandable is not None:
+        response_data = {
+            "text": text,
+            "lime_values": word_info_list,
+            "actual_label": actual_label,
+            "model_predicted_label": model_prediction_label,
+            "lime_predicted_label": lime_prediction_label,
+            "user_predicted_label": prediction,
+            "user_understandable": understandable,
+            "max_index": max_index
+        }
+    else:
+        response_data = {
+            "text": text,
+            "lime_values": word_info_list,
+            "max_index": max_index
+        }
 
     return response_data
 
