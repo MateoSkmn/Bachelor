@@ -1,20 +1,32 @@
 <app-header [index]="2"></app-header>
 
-<label for="randomSelect">Datensatz:</label>
-<select id="randomSelect" [(ngModel)]="recordName" (ngModelChange)="onSelectChange($event)">
-    @if (!recordList || recordList.length == 0) {
-        <option value="empty">Leer</option>
-    }
-    @for (item of recordList; track item;) {
-        <option (value)="item.file_name">{{ item.file_name }}</option>
-    }
-</select>
+<!-- SELECTION -->
+<div class="col-12 d-flex align-items-center justify-content-center mt-2 mb-2">
+    <div class="col-2 d-block">
+        <label for="randomSelect">Datensatz:</label>
+        <br/>
+        <select id="randomSelect" [(ngModel)]="recordName" (ngModelChange)="onSelectChange($event)">
+            @if (!recordList || recordList.length == 0) {
+                <option value="empty">Leer</option>
+            }
+            @for (item of recordList; track item;) {
+                <option (value)="item.file_name">{{ item.file_name }}</option>
+            }
+        </select>
+    </div>
 
-<label for="numberInput">Index:</label>
-<input type="number" id="numberInput" name="numberInput" min="0" (max)="maxIndex" [(ngModel)]="recordIndex" (ngModelChange)="onIndexChange()">
+    <div class="col-5 d-block">
+        <label for="numberInput">Index:</label>
+        <br/>
+        <input type="number" id="numberInput" name="numberInput" min="0" (max)="maxIndex" [(ngModel)]="recordIndex" (ngModelChange)="onIndexChange()">
+    </div>
 
-<app-styled-button icon="casino" label="Zufällig" (click)="randomIndex()"></app-styled-button>
-<app-styled-button icon="visibility" label="Legende" (click)="openLegende()"></app-styled-button>
+    <div class="col-4 d-flex justify-content-end">
+        <app-styled-button icon="casino" label="Zufällig" (click)="randomIndex()"></app-styled-button>
+        <app-styled-button icon="visibility" label="Legende" (click)="openLegende()" id="legende-btn"></app-styled-button>
+    </div>
+</div>
+<!-- TEXT -->
 <hr/>
 @if (!recordList || recordList.length == 0) {
     <p>Keine Analyse verfügbar</p>
@@ -24,43 +36,50 @@
     </div>
 }
 <hr/>
+<!-- EVALUATION -->
 @if (isFilledOut) {
-    <div>
-        <div>
-            Wie verständlich ist die Erklärung?
-            <app-star-evaluation [filledStars]="understandable" [isInteractable]="false"></app-star-evaluation>
-        </div>
-        <div>
-            Welche Bewertung erwarten Sie?
-            <app-star-evaluation [filledStars]="userPrediction" [isInteractable]="false"></app-star-evaluation>
+    <div class="col-12 d-flex justify-content-center">
+        <div class="col-11">
+            <div>
+                Wie verständlich ist die Erklärung?
+                <app-star-evaluation [filledStars]="understandable" [isInteractable]="false"></app-star-evaluation>
+            </div>
+            <div>
+                Welche Bewertung erwarten Sie?
+                <app-star-evaluation [filledStars]="userPrediction" [isInteractable]="false"></app-star-evaluation>
+            </div>
         </div>
     </div>
     <hr/>
-    <div>
-        <div>
-            Echte Bewertung:
-            <app-star-evaluation [filledStars]="actualLabel" [isInteractable]="false"></app-star-evaluation>
-        </div>
-        <div>
-            Modell Vorhersage:
-            <app-star-evaluation [filledStars]="modelPrediction" [isInteractable]="false"></app-star-evaluation>
-        </div>
-        <div>
-            LIME Vorhersage:
-            <app-star-evaluation [filledStars]="limePrediction" [isInteractable]="false"></app-star-evaluation>
+    <div class="col-12 d-flex justify-content-center">
+        <div class="col-11">
+            <div>
+                Echte Bewertung:
+                <app-star-evaluation [filledStars]="actualLabel" [isInteractable]="false"></app-star-evaluation>
+            </div>
+            <div>
+                Modell Vorhersage:
+                <app-star-evaluation [filledStars]="modelPrediction" [isInteractable]="false"></app-star-evaluation>
+            </div>
+            <div>
+                LIME Vorhersage:
+                <app-star-evaluation [filledStars]="limePrediction" [isInteractable]="false"></app-star-evaluation>
+            </div>
         </div>
     </div>
 }
 @else {
-    <div>
-        <div>
-            Wie verständlich ist die Erklärung?
-            <app-star-evaluation (filledStarsChanged)="onFilledStarsChange($event, true)"></app-star-evaluation>
+    <div class="col-12 d-flex justify-content-center">
+        <div class="col-11">
+            <div>
+                Wie verständlich ist die Erklärung?
+                <app-star-evaluation (filledStarsChanged)="onFilledStarsChange($event, true)"></app-star-evaluation>
+            </div>
+            <div>
+                Welche Bewertung erwarten Sie?
+                <app-star-evaluation (filledStarsChanged)="onFilledStarsChange($event, false)"></app-star-evaluation>
+            </div>
+            <app-styled-button icon="save" label="Speichern" [isDisabled]="isDisabled"  (click)="saveEvaluation()"></app-styled-button>
         </div>
-        <div>
-            Welche Bewertung erwarten Sie?
-            <app-star-evaluation (filledStarsChanged)="onFilledStarsChange($event, false)"></app-star-evaluation>
-        </div>
-        <app-styled-button icon="save" label="Speichern" (click)="saveEvaluation()"></app-styled-button>
     </div>
 }

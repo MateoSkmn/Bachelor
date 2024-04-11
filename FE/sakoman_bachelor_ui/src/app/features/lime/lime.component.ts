@@ -26,6 +26,7 @@ export class LimeComponent implements OnInit, OnDestroy{
   formattedText: SafeHtml = '';
 
   isFilledOut: boolean = false;
+  isDisabled: boolean = true;
   understandable: number = 0;
   userPrediction: number = 0;
 
@@ -120,6 +121,7 @@ export class LimeComponent implements OnInit, OnDestroy{
         }
         else {
           this.isFilledOut = false;
+          this.isDisabled = true;
         }
       },
       error: (error) => {
@@ -195,5 +197,9 @@ export class LimeComponent implements OnInit, OnDestroy{
       return;
     }
     this.userPrediction = value;
+
+    if(this.understandable != 0 && this.userPrediction != 0) {
+      this.isDisabled = false;
+    }
   }
 }

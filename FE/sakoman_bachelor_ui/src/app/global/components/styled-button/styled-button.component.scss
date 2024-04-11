@@ -9,6 +9,11 @@ button {
     display: inline;
 }
 
+button[disabled] {
+    background-color: $gray;
+    cursor: not-allowed;
+}
+
 button mat-icon {
     margin-right: 10px;
 }

@@ -1,4 +1,4 @@
-<button (click)="onClick()" [class.isClosing]="isClosing">
+<button (click)="onClick()" [class.isClosing]="isClosing" [disabled]="isDisabled">
     <div class="py-1 d-flex align-items-center">
         <mat-icon>{{ icon }}</mat-icon>
         {{ label }}

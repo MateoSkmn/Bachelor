@@ -12,6 +12,7 @@ export class StyledButtonComponent {
   @Input({ required: true}) icon: string = '';
   @Input({ required: true}) label: string = '';
   @Input() isClosing: boolean = false;
+  @Input() isDisabled: boolean = false;
 
   @Output() clicked: EventEmitter<void> = new EventEmitter<void>();
 
