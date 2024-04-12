@@ -8,6 +8,8 @@ import { RecordListItem } from '../../global/interfaces/record-list-item.interfa
 import { ErrorService } from '../../global/service/error.service';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { StarEvaluationComponent } from '../../global/components/star-evaluation/star-evaluation.component';
+import { MatDialog } from '@angular/material/dialog';
+import { LegendeComponent } from './legende/legende.component';
 
 @Component({
   selector: 'app-lime',
@@ -37,7 +39,8 @@ export class LimeComponent implements OnInit, OnDestroy{
   constructor(
     private apiService: ApiService,
     private errorService: ErrorService,
-    private sanitizer: DomSanitizer) {}
+    private sanitizer: DomSanitizer,
+    private dialog: MatDialog) {}
   
   private recordListSubscription!: Subscription;
   private limeExplanationSubscription!: Subscription;
@@ -188,7 +191,10 @@ export class LimeComponent implements OnInit, OnDestroy{
   }
 
   openLegende() {
-    console.log('Open Legende');
+    this.dialog.open(LegendeComponent, {
+      width: '500px',
+      disableClose: true
+    });
   }
 
   onFilledStarsChange(value: number, isForUnderstandable: boolean) {

@@ -1,0 +1,18 @@
+<div class="dialog p-3">
+    <p class="fs-5">Legende:</p>
+    <div class="d-flex">
+        <div class="d-flex flex-column">
+            @for (item of colorLegende; track item) {
+                <div class="d-flex mb-1">
+                    <div class="coloredSquare" [class]="item.color"></div>
+                    <div class="ms-1">{{item.value}}</div>
+                    <mat-icon>star</mat-icon>
+                </div>
+            }
+        </div>
+        <div class="ms-4">Markierungen mit geringerer Gewichtung werden transparenter dargestellt.</div>
+    </div>
+    <div class="col-12 d-flex justify-content-end">
+        <app-styled-button icon="close" label="Schließen" [isClosing]="true" (click)="closeLegende()"></app-styled-button>
+    </div>
+</div>
