@@ -1,2 +1,33 @@
 <app-header [index]="1"></app-header>
-<p>model works!</p>
+<input type="file" #fileInput style="display: none;" (change)="handleFileInput($event)">
+
+<app-styled-button 
+class="justify-content-end d-flex"
+icon="add_circle_outline"
+label="Upload"
+(clicked)="uploadFile()"
+/>
+@if (modelList && modelList.length > 0) {
+    <div class="table-header">
+        <div class="col-12 d-flex align-items-center">
+            <div class="id-column">ID</div>
+            <div class="col-4">Dateiname</div>
+            <div class="col-6">Datensatz</div>
+        </div>
+    </div>
+    @for (item of modelList; track item;) {
+        <app-model-table-row
+        [fileName]="item.file_name" 
+        [fileIndex]="$index + 1"
+        [recordName]="item.record_name"></app-model-table-row>
+    }
+    <app-styled-button 
+        class="justify-content-end d-flex"
+        icon="add_circle_outline"
+        label="Upload"
+        (clicked)="uploadFile()"
+    />
+}
+@else {
+    <div class="d-flex justify-content-center">KEINE DATEN GEFUNDEN</div>
+}

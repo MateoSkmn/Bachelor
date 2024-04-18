@@ -17,9 +17,10 @@ def delete_file(directory, filename):
             csv_editor.remove_csv_line('BE/Data/UserInfo/connections.csv', dict(index=0, value=filename))
         elif directory == 'BE/data/model':
             record_name = data_handler.get_record_by_model_connection(filename)
-            evaluation_path = 'BE/Data/UserInfo/Evaluation/' + record_name + '.csv'
-            csv_editor.clear_csv(evaluation_path)
-            csv_editor.remove_csv_line('BE/Data/UserInfo/connections.csv', dict(index=1, value=filename))
+            if record_name is not None:
+                evaluation_path = 'BE/Data/UserInfo/Evaluation/' + record_name + '.csv'
+                csv_editor.clear_csv(evaluation_path)
+                csv_editor.remove_csv_line('BE/Data/UserInfo/connections.csv', dict(index=1, value=filename))
         return Response(True, 200, f"{filename} has been deleted successfully.")
     except FileNotFoundError:
         return Response(False, 404, f"File {filename} not found in directory {directory}.")

@@ -88,8 +88,8 @@ export class ApiService {
     )
   }
 
-  deleteModel(): Observable<Response> {
-    const url = `${this.BASE_URL}/data/model`;
+  deleteModel(file_name: string): Observable<Response> {
+    const url = `${this.BASE_URL}/data/model/${file_name}`;
     return this.http.delete<Response>(url).pipe(
       catchError((error) => {
         return throwError(() => error);
