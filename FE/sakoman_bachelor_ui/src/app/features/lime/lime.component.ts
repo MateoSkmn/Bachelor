@@ -10,11 +10,12 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { StarEvaluationComponent } from '../../global/components/star-evaluation/star-evaluation.component';
 import { MatDialog } from '@angular/material/dialog';
 import { LegendeComponent } from './legende/legende.component';
+import { MatProgressSpinnerModule} from '@angular/material/progress-spinner'
 
 @Component({
   selector: 'app-lime',
   standalone: true,
-  imports: [HeaderComponent, StyledButtonComponent, FormsModule, StarEvaluationComponent],
+  imports: [HeaderComponent, StyledButtonComponent, FormsModule, StarEvaluationComponent, MatProgressSpinnerModule],
   templateUrl: './lime.component.html',
   styleUrl: './lime.component.scss'
 })
@@ -24,6 +25,7 @@ export class LimeComponent implements OnInit, OnDestroy{
   maxIndex: number = Number.MAX_SAFE_INTEGER;
   recordName: string = '';
   recordList: RecordListItem[] = [];
+  loading: boolean = false;
 
   formattedText: SafeHtml = '';
 
@@ -105,12 +107,12 @@ export class LimeComponent implements OnInit, OnDestroy{
   }
 
   requestLimeExplanation() {
-    // TODO: Loading Screen
-    console.log("Loading...");
+    this.loading = true;
+    this.isFilledOut = false;
     this.limeExplanationSubscription = this.apiService.getLime(this.recordName, this.recordIndex).subscribe({
       next: (response) => {
         this.formattedText = this.colorWordsBasedOnValues(response.text, response.lime_values);
-        console.log("Completed");
+        this.loading = false;
         this.setTextAlign();
         this.maxIndex = response.max_index
 
