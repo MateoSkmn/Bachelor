@@ -8,10 +8,12 @@
             </div>
             <div class="col-6">
                 <select>
-                    @if (!recordName) {
-                        <option value="empty">Leer</option>
-                    } @else {
+                        <option value=""></option>
+                    @if (recordName) {
                         <option (value)="recordName">{{ recordName }}</option>
+                    }
+                    @for (item of recordList; track item;) {
+                        <option (value)="item.file_name">{{ item.file_name }}</option>
                     }
                 </select>
             </div>

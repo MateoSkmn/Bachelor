@@ -6,6 +6,7 @@ import { ApiService } from '../../global/service/api.service';
 import { ErrorService } from '../../global/service/error.service';
 import { ModelListItem } from '../../global/interfaces/model-list-item.interface';
 import { ModelTableRowComponent } from './model-table-row/model-table-row.component';
+import { RecordListItem } from '../../global/interfaces/record-list-item.interface';
 
 @Component({
   selector: 'app-model',
@@ -18,17 +19,28 @@ export class ModelComponent implements OnInit, OnDestroy {
 
   @ViewChild('fileInput') fileInput!: ElementRef;
 
+  private modelListSubscription!: Subscription;
   private recordListSubscription!: Subscription;
   private uploadSubscription!: Subscription;
 
   modelList: ModelListItem[] = [];
+  recordList: RecordListItem[] = [];
 
   constructor(private apiService: ApiService, private errorService: ErrorService) {}
 
   ngOnInit(): void {
-    this.recordListSubscription = this.apiService.getModels().subscribe({
+    this.modelListSubscription = this.apiService.getModels().subscribe({
       next: (response) => {
         this.modelList = response;
+      },
+      error: (error) => {
+        this.errorService.triggerError(error);
+      }
+    });
+
+    this.recordListSubscription = this.apiService.getRecords().subscribe({
+      next: (response) => {
+        this.recordList = response.filter(item => !item.hasModel);
       },
       error: (error) => {
         this.errorService.triggerError(error);
@@ -37,8 +49,8 @@ export class ModelComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.recordListSubscription) {
-      this.recordListSubscription.unsubscribe();
+    if (this.modelListSubscription) {
+      this.modelListSubscription.unsubscribe();
     }
     if (this.uploadSubscription) {
       this.uploadSubscription.unsubscribe();

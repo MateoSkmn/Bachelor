@@ -1,9 +1,10 @@
-import { Component, Input, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ApiService } from '../../../global/service/api.service';
 import { ErrorService } from '../../../global/service/error.service';
 import { MatIconModule } from '@angular/material/icon';
+import { RecordListItem } from '../../../global/interfaces/record-list-item.interface';
 
 @Component({
   selector: 'app-model-table-row',
@@ -17,6 +18,7 @@ export class ModelTableRowComponent implements OnDestroy {
   @Input() fileName: string = "";
   @Input() fileIndex: number = 0;
   @Input() recordName: string | null = "";
+  @Input() recordList: RecordListItem[] = [];
 
   private deleteSubscription!: Subscription;
 
