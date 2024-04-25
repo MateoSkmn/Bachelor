@@ -7,10 +7,10 @@
                 <div class="text-truncate">{{ fileName }}</div>
             </div>
             <div class="col-6">
-                <select>
+                <select class="w-50">
                         <option value=""></option>
                     @if (recordName) {
-                        <option (value)="recordName">{{ recordName }}</option>
+                        <option (value)="recordName" selected="true">{{ recordName }}</option>
                     }
                     @for (item of recordList; track item;) {
                         <option (value)="item.file_name">{{ item.file_name }}</option>
