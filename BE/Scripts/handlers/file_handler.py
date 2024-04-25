@@ -47,21 +47,21 @@ def upload_file(app, folder):
     file.save(file_path)
 
     # Create Evaluation csv file for records
-    if folder == "../data/record":
-        path = "BE/Data/UserInfo/Evaluation/" + file.filename + ".csv"
-        header = ["id", "understandable", "prediction"]
+    if folder == '../data/record':
+        path = 'BE/Data/UserInfo/Evaluation/' + file.filename + '.csv'
+        header = ['id', 'understandable', 'prediction']
         csv_editor.add_csv_line(path, header)
 
     return Response(True, 200, 'File uploaded successfully')
 
 def edit_connection(data):
-    path = "BE/Data/UserInfo/connections.csv"
-    search_value = {"index": 0, "value": data[0]}
+    path = 'BE/Data/UserInfo/connections.csv'
+    search_value = {'index': 0, 'value': data[0]}
     # data in format [string, string]
     if len(data) != 2:
-        return Response(400, "Connection needs exactly 2 values!")
+        return Response(400, 'Connection needs exactly 2 values!')
     # Delete line when no connection is set
-    if data[1] == "":
+    if data[1] == '':
         return csv_editor.remove_csv_line(path, search_value)
     # Edit line if record has changed
     response = csv_editor.edit_csv_line(path, search_value, data)

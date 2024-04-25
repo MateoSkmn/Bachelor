@@ -21,7 +21,7 @@ def explanation(file_name, id):
     record_directory = 'BE/Data/Record/'
 
     data = pd.read_csv(record_directory + file_name)
-    X, y = data["Review Text"], data["Rating"]
+    X, y = data['Review Text'], data['Rating']
     _, X_test, _, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     index = int(id)
 
@@ -41,20 +41,20 @@ def explanation(file_name, id):
 
     if understandable is not None:
         response_data = {
-            "text": text,
-            "lime_values": word_info_list,
-            "actual_label": actual_label,
-            "model_predicted_label": model_prediction_label,
-            "lime_predicted_label": lime_prediction_label,
-            "user_predicted_label": prediction,
-            "user_understandable": understandable,
-            "max_index": max_index
+            'text': text,
+            'lime_values': word_info_list,
+            'actual_label': actual_label,
+            'model_predicted_label': model_prediction_label,
+            'lime_predicted_label': lime_prediction_label,
+            'user_predicted_label': prediction,
+            'user_understandable': understandable,
+            'max_index': max_index
         }
     else:
         response_data = {
-            "text": text,
-            "lime_values": word_info_list,
-            "max_index": max_index
+            'text': text,
+            'lime_values': word_info_list,
+            'max_index': max_index
         }
 
     return response_data

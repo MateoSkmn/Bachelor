@@ -11,7 +11,7 @@ import handlers.lime_handler as lime_handler
 ### SETUP ###
 app = Flask(__name__)
 CORS(app, origins=['http://localhost:4200', 'http://localhost:4200/*'])
-#TODO: Check for '' and ""
+#TODO: Check if connections.csv exists, if not create
 ######
 
 ### ROUTES ###
@@ -22,11 +22,11 @@ def base_route():
 
 @app.route('/data/record', methods=['GET'])
 def get_records():
-    return jsonify(data_handler.get_records())
+    return data_handler.get_records()
 
 @app.route('/data/model', methods=['GET'])
 def get_models():
-    return jsonify(data_handler.get_models())
+    return data_handler.get_models()
 
 @app.route('/data/record/<file_name>/<id>/lime', methods=['GET'])
 def get_lime(file_name, id):
@@ -35,33 +35,33 @@ def get_lime(file_name, id):
 # POST
 @app.route('/data/record', methods=['POST'])
 def upload_record():
-    response = file_handler.upload_file(app, "../data/record")
+    response = file_handler.upload_file(app, '../data/record')
     if response.success == False:
         abort(response.code, response.message)
-    return jsonify(response.__dict__), response.code
+    return response.__dict__, response.code
 
 @app.route('/data/model', methods=['POST'])
 def upload_model():
-    response = file_handler.upload_file(app, "../data/model")
+    response = file_handler.upload_file(app, '../data/model')
     if response.success == False:
         abort(response.code, response.message)
-    return jsonify(response.__dict__), response.code
+    return response.__dict__, response.code
 
 @app.route('/data/user-info/connection', methods=['POST'])
 def upload_user_info_connection():
     response = file_handler.edit_connection(request.json)
     if response.success == True:
-        return jsonify(response.__dict__)
+        return response.__dict__
     abort(response.code, response.message)
 
 @app.route('/data/user-info/evaluation/<file_name>', methods=['POST'])
 def upload_user_info_evaluation(file_name):
     data = request.json
-    path = "BE/Data/UserInfo/Evaluation/" + file_name + ".csv"
+    path = 'BE/Data/UserInfo/Evaluation/' + file_name + '.csv'
     response = csv_editor.add_csv_line(path, data)
 
     if response.success == True:
-        return jsonify(response.__dict__)
+        return response.__dict__
     abort(response.code, response.message)
 
 # DELETE
@@ -70,14 +70,14 @@ def delete_record(file_name):
     response = file_handler.delete_file('BE/data/record', file_name)
     if response.success == False:
         abort(response.code, response.message)
-    return jsonify(response.__dict__), response.code
+    return response.__dict__, response.code
 
 @app.route('/data/model/<file_name>', methods=['DELETE'])
 def delete_model(file_name):
     response = file_handler.delete_file('BE/data/model', file_name)
     if response.success == False:
         abort(response.code, response.message)
-    return jsonify(response.__dict__), response.code
+    return response.__dict__, response.code
 ######
 
 if __name__ == '__main__':

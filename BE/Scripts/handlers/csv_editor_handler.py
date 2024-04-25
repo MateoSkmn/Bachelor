@@ -4,7 +4,7 @@ from helper.response import Response
 ######
 
 def find_csv_line_index(file_path, search_value):
-    """
+    '''
     Find the index of a line in a CSV file based on column values.
 
     Parameters:
@@ -15,7 +15,7 @@ def find_csv_line_index(file_path, search_value):
 
     Returns:
         int: The index of the line if found, -1 otherwise.
-    """
+    '''
     try:
         # Read the CSV file and search for the line index
         with open(file_path, 'r', newline='') as file:
@@ -25,11 +25,11 @@ def find_csv_line_index(file_path, search_value):
                     return idx
         return -1
     except IOError:
-        print("Error: File not found or unable to read.")
+        print('Error: File not found or unable to read.')
         return -1
 
 def edit_csv_line(file_path, search_value, new_data):
-    """
+    '''
     Edit a specific line in a CSV file based on column values.
 
     Parameters:
@@ -41,15 +41,15 @@ def edit_csv_line(file_path, search_value, new_data):
 
     Returns:
         bool: True if the edit was successful, False otherwise.
-    """
+    '''
     line_index = find_csv_line_index(file_path, search_value)
     if line_index != -1:
         return edit_csv_line_by_index(file_path, line_index, new_data)
     else:
-        return Response(False, 404, "Line with specified values not found.")
+        return Response(False, 404, 'Line with specified values not found.')
 
 def edit_csv_line_by_index(file_path, line_index, new_data):
-    """
+    '''
     Edit a specific line in a CSV file based on its index.
 
     Parameters:
@@ -59,7 +59,7 @@ def edit_csv_line_by_index(file_path, line_index, new_data):
 
     Returns:
         bool: True if the edit was successful, False otherwise.
-    """
+    '''
     try:
         # Read the existing CSV file
         with open(file_path, 'r', newline='') as file:
@@ -75,24 +75,24 @@ def edit_csv_line_by_index(file_path, line_index, new_data):
                 writer = csv.writer(file)
                 writer.writerows(lines)
 
-            return Response(True, 200, "Connection edited.")
+            return Response(True, 200, 'Connection edited.')
         else:
-            return Response(False, 400, "Line index is out of range.")
+            return Response(False, 400, 'Line index is out of range.')
     except FileNotFoundError:
-        print("Error: File not found.")
-        return Response(False, 404, "File not found.")
+        print('Error: File not found.')
+        return Response(False, 404, 'File not found.')
     except PermissionError:
-        print("Error: Permission denied to read/write the file.")
-        return Response(False, 403, "Permission denied to read/write the file.")
+        print('Error: Permission denied to read/write the file.')
+        return Response(False, 403, 'Permission denied to read/write the file.')
     except IOError:
-        print("Error: Unable to read/write the file.")
+        print('Error: Unable to read/write the file.')
         return Response(False, 500, "Unable to read/write the file.")
     except Exception as e:
-        print(f"Error: {e}")
-        return Response(False, 500, "An unexpected error occurred.")
+        print(f'Error: {e}')
+        return Response(False, 500, 'An unexpected error occurred.')
 
 def add_csv_line(file_path, data):
-    """
+    '''
     Add a new line to a CSV file.
 
     Parameters:
@@ -101,18 +101,18 @@ def add_csv_line(file_path, data):
 
     Returns:
         bool: True if the addition was successful, False otherwise.
-    """
+    '''
     try:
         # Append data as a new line to the CSV file
         with open(file_path, 'a', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(data)
-        return Response(True, 200, "Added line to csv")
+        return Response(True, 200, 'Added line to csv')
     except IOError:
-        return Response(True, 400, "Error: File not found or unable to read/write.")
+        return Response(True, 400, 'Error: File not found or unable to read/write.')
 
 def remove_csv_line(file_path, search_value):
-    """
+    '''
     Remove a specific line from a CSV file based on column values.
 
     Parameters:
@@ -123,15 +123,15 @@ def remove_csv_line(file_path, search_value):
 
     Returns:
         bool: True if the removal was successful, False otherwise.
-    """
+    '''
     line_index = find_csv_line_index(file_path, search_value)
     if line_index != -1:
         return remove_csv_line_by_index(file_path, line_index)
     else:
-        return Response(False, 404, "Line with specified values not found.")
+        return Response(False, 404, 'Line with specified values not found.')
 
 def remove_csv_line_by_index(file_path, line_index):
-    """
+    '''
     Remove a specific line from a CSV file based on its index.
 
     Parameters:
@@ -140,7 +140,7 @@ def remove_csv_line_by_index(file_path, line_index):
 
     Returns:
         bool: True if the removal was successful, False otherwise.
-    """
+    '''
     try:
         # Read the existing CSV file
         with open(file_path, 'r', newline='') as file:
@@ -156,14 +156,14 @@ def remove_csv_line_by_index(file_path, line_index):
                 writer = csv.writer(file)
                 writer.writerows(lines)
 
-            return Response(True, 200, "Connection deleted.")
+            return Response(True, 200, 'Connection deleted.')
         else:
-            return Response(True, 400, "Line index is out of range.")
+            return Response(True, 400, 'Line index is out of range.')
     except IOError:
-        return Response(True, 400, "Error: File not found or unable to read/write.")
+        return Response(True, 400, 'Error: File not found or unable to read/write.')
     
 def clear_csv(file_path):
-    """
+    '''
     Delete all entries in a CSV file except the header
 
     Parameters:
@@ -172,7 +172,7 @@ def clear_csv(file_path):
 
     Returns:
         bool: True if the removal was successful, False otherwise.
-    """
+    '''
     try:
         # Read the existing CSV file
         with open(file_path, 'r', newline='') as file:
@@ -189,5 +189,5 @@ def clear_csv(file_path):
         return True
 
     except IOError:
-        print("Error: File not found or unable to read/write.")
+        print('Error: File not found or unable to read/write.')
         return False

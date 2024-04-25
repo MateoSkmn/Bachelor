@@ -3,15 +3,13 @@ import os
 import pandas as pd
 ######
 
-# TODO: create connection file if it doesnt exist
-
 def get_records():
     # Return all the record names and if they have a model
     record_list = []
     connections_df = pd.read_csv('BE/data/userInfo/connections.csv')
     for file_name in __allFileNamesSorted('BE/data/record'):
         hasModel = file_name in connections_df['record'].values
-        record_list.append({"file_name": file_name, "hasModel": hasModel})
+        record_list.append({'file_name': file_name, 'hasModel': hasModel})
         
     return record_list
 
@@ -22,7 +20,7 @@ def get_models():
     for file_name in __allFileNamesSorted('BE/data/model'):
         record = connections_df.loc[connections_df['model'] == file_name, 'record'].values
         record_name = record[0] if len(record) > 0 else None
-        model_list.append({"file_name": file_name, "record_name": record_name})
+        model_list.append({'file_name': file_name, 'record_name': record_name})
     
     return model_list
 
