@@ -21,12 +21,16 @@ export class ModelTableRowComponent implements OnDestroy {
   @Input() recordList: RecordListItem[] = [];
 
   private deleteSubscription!: Subscription;
+  private connectionSubscription!: Subscription;
 
   constructor(private apiService: ApiService, private router: Router, private errorService: ErrorService) {}
 
   ngOnDestroy(): void {
     if (this.deleteSubscription) {
       this.deleteSubscription.unsubscribe();
+    }
+    if (this.connectionSubscription) {
+      this.connectionSubscription.unsubscribe();
     }
   }
 
@@ -39,5 +43,17 @@ export class ModelTableRowComponent implements OnDestroy {
         this.errorService.triggerError(error);
       }
     });
+  }
+
+  handleChange(record: string): void {
+    const body: string[] = [record, this.fileName];
+    this.connectionSubscription = this.apiService.postConnection(body).subscribe({
+      next: (response) => {
+        window.location.reload();
+      },
+      error: (error) => {
+        this.errorService.triggerError(error);
+      }
+    })
   }
 }
