@@ -7,15 +7,23 @@ import handlers.data_handler as data_handler
 ######
 
 def delete_file(directory, filename):
-    # Delete a file in a given directory
+    '''
+    Delete a file in a given directory.
+
+    Parameters:
+        directory (str): name of the directory => 'BE/data/record' or 'BE/data/model'
+        filename (str): name of the file
+    '''
     file_path = os.path.join(directory, filename)
 
     try:
         os.remove(file_path)
         if directory == 'BE/data/record':
+            # Deleting a record also deletes the evaluation and the connection
             os.remove('BE/Data/UserInfo/Evaluation/' + filename + '.csv')
             csv_editor.remove_csv_line('BE/Data/UserInfo/connections.csv', dict(index=0, value=filename))
         elif directory == 'BE/data/model':
+            # Deleting a model also clears the corresponding evaluation
             record_name = data_handler.get_record_by_model_connection(filename)
             if record_name is not None:
                 evaluation_path = 'BE/Data/UserInfo/Evaluation/' + record_name + '.csv'
@@ -30,7 +38,13 @@ def delete_file(directory, filename):
         return Response(False, 400, f"An error occurred: {e}")
     
 def upload_file(app, folder):
-    # Upload a file to a given directory
+    '''
+    Upload a file to a given directory.
+
+    Parameters:
+        app (Flask): Access to Flask
+        folder (str): 
+    '''
     if 'file' not in request.files:
         return Response(False, 400, 'No file part')
     
@@ -55,6 +69,12 @@ def upload_file(app, folder):
     return Response(True, 200, 'File uploaded successfully')
 
 def edit_connection(data):
+    '''
+    Edit the connection.csv.
+
+    Parameter:
+        data (list): String list in form of [record_name, model_name]
+    '''
     path = 'BE/Data/UserInfo/connections.csv'
     search_value = {'index': 1, 'value': data[1]}
     # data in format [string, string]

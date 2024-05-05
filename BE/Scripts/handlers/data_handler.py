@@ -4,7 +4,7 @@ import pandas as pd
 ######
 
 def get_records():
-    # Return all the record names and if they have a model
+    ''' Return all the record names and if they have a model '''
     record_list = []
     connections_df = pd.read_csv('BE/data/userInfo/connections.csv')
     for file_name in __allFileNamesSorted('BE/data/record'):
@@ -14,7 +14,7 @@ def get_records():
     return record_list
 
 def get_models():
-    # Return all the models and their corresponding record
+    ''' Return all the models and their corresponding record '''
     model_list = []
     connections_df = pd.read_csv('BE/data/userInfo/connections.csv')
     for file_name in __allFileNamesSorted('BE/data/model'):
@@ -24,7 +24,13 @@ def get_models():
     
     return model_list
 
-def get_model_by_record_connection(record: str) -> str:
+def get_model_by_record_connection(record: str):
+    '''
+    Get the connected model from a record.
+
+    Parameter:
+        record (str): Name of the record to search for
+    '''
     connections_df = pd.read_csv('BE/data/userInfo/connections.csv')
     filtered_df = connections_df[connections_df['record'] == record]['model']
 
@@ -32,7 +38,13 @@ def get_model_by_record_connection(record: str) -> str:
         return filtered_df.iloc[0]
     return None
 
-def get_record_by_model_connection(model: str) -> str:
+def get_record_by_model_connection(model: str):
+    '''
+    Get the connected record from a model
+    
+    Parameter:
+        model (str): Name of the model to search for
+    '''
     connections_df = pd.read_csv('BE/data/userInfo/connections.csv')
     filtered_df = connections_df[connections_df['model'] == model]['record']
     
@@ -41,6 +53,13 @@ def get_record_by_model_connection(model: str) -> str:
     return None
 
 def get_user_data(file_name, id):
+    '''
+    Returns the evaluation data for a given instance
+    
+    Parameters:
+        file_name (str): Name of the evaluation file
+        id (str): id of the instance
+    '''
     path = 'BE/data/userInfo/evaluation/' + file_name
     evaluation_df = pd.read_csv(path)
     filtered_df = evaluation_df[evaluation_df['id'] == int(id)]
@@ -54,7 +73,7 @@ def get_user_data(file_name, id):
         return None, None
 
 ### HELPER ###
-def __allFileNamesSorted(directory) -> list:
+def __allFileNamesSorted(directory):
     # Get all filenames in the directory with modification times
     file_names_with_mtime = []
     for root, _, files in os.walk(directory):
