@@ -1,4 +1,5 @@
 ### IMPORTS ###
+import os
 from flask import Flask, jsonify, abort, request
 from flask_cors import CORS
 
@@ -11,7 +12,10 @@ import handlers.lime_handler as lime_handler
 ### SETUP ###
 app = Flask(__name__)
 CORS(app, origins=['http://localhost:4200', 'http://localhost:4200/*'])
-#TODO: Check if connections.csv exists, if not create
+
+# Check if the connections.csv file exists
+if not os.path.exists('BE/data/userInfo/connections.csv'):
+    csv_editor.add_csv_line('BE/data/userInfo/connections.csv', ['record','model'])
 ######
 
 ### ROUTES ###
