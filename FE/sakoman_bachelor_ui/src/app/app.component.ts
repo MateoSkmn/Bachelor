@@ -8,8 +8,7 @@ import { ErrorService } from './global/service/error.service';
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, NotificationComponent],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  templateUrl: './app.component.html'
 })
 export class AppComponent implements OnInit {
   title = 'sakoman_bachelor_ui';
@@ -20,7 +19,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.errorService.errorEvent.subscribe((error) => {
-        // Handle the error here, you can log it, display to the user, etc.
+        // Handles the incoming errors
         this.response = [];
         if(error) {
           this.response.push(error);

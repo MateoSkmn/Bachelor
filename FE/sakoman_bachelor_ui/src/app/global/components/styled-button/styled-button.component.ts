@@ -16,6 +16,9 @@ export class StyledButtonComponent {
 
   @Output() clicked: EventEmitter<void> = new EventEmitter<void>();
 
+  /**
+   * Custom Button
+   */
   onClick(): void {
     this.clicked.emit();
   }

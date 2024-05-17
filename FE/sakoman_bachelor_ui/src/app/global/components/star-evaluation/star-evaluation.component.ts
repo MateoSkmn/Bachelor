@@ -17,6 +17,9 @@ export class StarEvaluationComponent {
 
   stars = Array(this.numberOfStars);
 
+  /**
+   * @param index Value to check which star was clicked
+   */
   clickStar(index: number) {
     if (!this.isInteractable) {
       return
