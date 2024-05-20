@@ -21,6 +21,9 @@ export class LegendeComponent {
     {color: 'red', value: 1},
   ]
 
+  /**
+   * Closes the dialog
+   */
   closeLegende(): void {
     this.dialogRef.close();
   }

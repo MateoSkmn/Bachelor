@@ -25,6 +25,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   constructor(private apiService: ApiService, private errorService: ErrorService) {}
 
+  //Initial loading of data
   ngOnInit(): void {
     this.recordListSubscription = this.apiService.getRecords().subscribe({
       next: (response) => {
@@ -36,6 +37,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
+  //Unsubscribe when no longer needed
   ngOnDestroy(): void {
     if (this.recordListSubscription) {
       this.recordListSubscription.unsubscribe();
@@ -45,17 +47,24 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Open file uploader
+   */
   uploadFile(): void {
     this.fileInput.nativeElement.click();
   }
 
+  /**
+   * Send uplaoded file to the BE
+   * @param event Uploaded file
+   */
   handleFileInput(event: any): void {
     const file = event.target.files[0];
     const formData = new FormData();
     formData.append('file', file);
 
     this.uploadSubscription = this.apiService.postRecord(formData).subscribe({
-      next: (response) => {
+      next: () => {
         window.location.reload();
       },
       error: (error) => {

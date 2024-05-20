@@ -22,15 +22,19 @@ export class RecordTableRowComponent implements OnDestroy {
 
   constructor(private apiService: ApiService, private router: Router, private errorService: ErrorService) {}
 
+  //Unsubscribe when no longer used
   ngOnDestroy(): void {
     if (this.deleteSubscription) {
       this.deleteSubscription.unsubscribe();
     }
   }
 
+  /**
+   * Request deletion of selected file
+   */
   deleteFile(): void {
     this.deleteSubscription = this.apiService.deleteRecord(this.fileName).subscribe({
-      next: (response) => {
+      next: () => {
         window.location.reload();
       },
       error: (error) => {

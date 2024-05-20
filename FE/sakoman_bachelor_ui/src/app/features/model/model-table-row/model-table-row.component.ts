@@ -25,6 +25,7 @@ export class ModelTableRowComponent implements OnDestroy {
 
   constructor(private apiService: ApiService, private router: Router, private errorService: ErrorService) {}
 
+  //Unsubscribe when not used anymore
   ngOnDestroy(): void {
     if (this.deleteSubscription) {
       this.deleteSubscription.unsubscribe();
@@ -34,9 +35,12 @@ export class ModelTableRowComponent implements OnDestroy {
     }
   }
 
+  /**
+   * Request deletion; on success the page is reloaded
+   */
   deleteFile(): void {
     this.deleteSubscription = this.apiService.deleteModel(this.fileName).subscribe({
-      next: (response) => {
+      next: () => {
         window.location.reload();
       },
       error: (error) => {
@@ -45,10 +49,14 @@ export class ModelTableRowComponent implements OnDestroy {
     });
   }
 
+  /**
+   * When the dropdown is changed the change is send to the BE
+   * @param record Name of the selected record
+   */
   handleChange(record: string): void {
     const body: string[] = [record, this.fileName];
     this.connectionSubscription = this.apiService.postConnection(body).subscribe({
-      next: (response) => {
+      next: () => {
         window.location.reload();
       },
       error: (error) => {

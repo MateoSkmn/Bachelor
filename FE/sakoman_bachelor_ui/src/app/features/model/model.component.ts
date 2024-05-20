@@ -28,6 +28,7 @@ export class ModelComponent implements OnInit, OnDestroy {
 
   constructor(private apiService: ApiService, private errorService: ErrorService) {}
 
+  //Requests data from the BE when the component is loaded
   ngOnInit(): void {
     this.modelListSubscription = this.apiService.getModels().subscribe({
       next: (response) => {
@@ -48,6 +49,7 @@ export class ModelComponent implements OnInit, OnDestroy {
     });
   }
 
+  //Avoid potential memory leaks by unsubscribing when the component is no longer used
   ngOnDestroy(): void {
     if (this.modelListSubscription) {
       this.modelListSubscription.unsubscribe();
@@ -57,10 +59,17 @@ export class ModelComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Button event to open file uploader
+   */
   uploadFile(): void {
     this.fileInput.nativeElement.click();
   }
 
+  /**
+   * Sends the uplaoded file to the BE
+   * @param event Data uploaded by file uploader
+   */
   handleFileInput(event: any): void {
     const file = event.target.files[0];
     const formData = new FormData();

@@ -49,7 +49,9 @@ export class LimeComponent implements OnInit, OnDestroy{
   private saveUserInfoSubscription!: Subscription;
   private numberValueChangeSubject = new Subject<number>();
 
+  // Initial Loading of data
   ngOnInit(): void {
+    // Loads all records that have a model assigned to them
     this.recordListSubscription = this.apiService.getRecords().subscribe({
       next: (response) => {
         this.recordList = response.filter(item => item.hasModel);
@@ -61,6 +63,7 @@ export class LimeComponent implements OnInit, OnDestroy{
       }
     });
 
+    // UX extension for index input
     this.numberValueChangeSubject.pipe(
       debounceTime(1000) // Debounce for 1 seconds
     ).subscribe(() => {
@@ -75,6 +78,7 @@ export class LimeComponent implements OnInit, OnDestroy{
     });
   }
 
+  // Unsubscribe when no longer needed
   ngOnDestroy(): void {
     if (this.recordListSubscription) {
       this.recordListSubscription.unsubscribe();
@@ -87,13 +91,16 @@ export class LimeComponent implements OnInit, OnDestroy{
     }
   }
 
+  /**
+   * Sets the text align so that longer texts are justified and shorter ones are centered. For nicer looking results
+   */
   setTextAlign(): void {
     const textContainer = document.getElementById("textContainer");
     if (!textContainer) {
       return;
     }
 
-    // Delay the measurement to ensure the layout has been updated
+    // Delay to ensure the layout has been updated
     setTimeout(() => {
       const containerHeight = textContainer.offsetHeight;
       const lineHeight = parseInt(window.getComputedStyle(textContainer).lineHeight);
@@ -106,6 +113,9 @@ export class LimeComponent implements OnInit, OnDestroy{
     }, 1);
   }
 
+  /**
+   * Request LIME explanation from BE. Also checks if the current instance already has a prediction
+   */
   requestLimeExplanation() {
     this.loading = true;
     this.isFilledOut = false;
@@ -136,20 +146,36 @@ export class LimeComponent implements OnInit, OnDestroy{
     });
   }
 
+  /**
+   * Trigger when index value is changed
+   */
   onIndexChange() {
     this.numberValueChangeSubject.next(this.recordIndex);
   }
 
+  /**
+   * Trigger when selected record is changed
+   * @param value Selected record name
+   */
   onSelectChange(value: string) {
     this.recordName = value;
     this.requestLimeExplanation();
   }
 
+  /**
+   * Request LIME explanation for random value within bounds
+   */
   randomIndex() {
     this.recordIndex = Math.floor(Math.random() * (this.maxIndex + 1));
     this.requestLimeExplanation();
   }
 
+  /**
+   * Marks the words from the LIME explanation with different colors based on the predicted label
+   * @param text Instance of selected text
+   * @param limeValues LIME explanation values
+   * @returns Formatted text with colored words as SafeHtml
+   */
   colorWordsBasedOnValues(text: string, limeValues: any[]): SafeHtml {
     const colorMap: any = {
       1: 'rgba(255, 0, 0, ALPHA)', // red
@@ -161,13 +187,16 @@ export class LimeComponent implements OnInit, OnDestroy{
 
     let coloredText = '';
 
-    const words = text.split(/\b/); // Split by word boundaries
+    //Split by word
+    const words = text.split(/\b/);
     words.forEach((word) => {
+      //Find words that are in text & limeValues
       const found = limeValues.find((value) => value.word.toLowerCase() === word.toLowerCase());
       if (found) {
-        let alpha = found.value; // Use value as alpha
+        let alpha = found.value;
+        //UX: easier visualization by removing those that are to difficult to see
         if (alpha < 0.001) {
-          alpha = 0; // Ensure minimum alpha value
+          alpha = 0;
         }
         const color = colorMap[found.index].replace('ALPHA', alpha.toString());
         coloredText += `<span style="background-color: ${color}">${word}</span>`;
@@ -180,6 +209,9 @@ export class LimeComponent implements OnInit, OnDestroy{
     return this.sanitizer.bypassSecurityTrustHtml(coloredText);
   }
 
+  /**
+   * Save user data
+   */
   saveEvaluation() {
     const body = [this.recordIndex, this.understandable, this.userPrediction];
     this.saveUserInfoSubscription = this.apiService.postEvaluation(this.recordName, body).subscribe({
@@ -192,6 +224,9 @@ export class LimeComponent implements OnInit, OnDestroy{
     });
   }
 
+  /**
+   * Open a dialog window
+   */
   openLegende() {
     this.dialog.open(LegendeComponent, {
       width: '500px',
@@ -199,6 +234,11 @@ export class LimeComponent implements OnInit, OnDestroy{
     });
   }
 
+  /**
+   * Update user data when interacted with the star component
+   * @param value Index of the selected star
+   * @param isForUnderstandable Check what the component is for
+   */
   onFilledStarsChange(value: number, isForUnderstandable: boolean) {
     if (isForUnderstandable) {
       this.understandable = value;
