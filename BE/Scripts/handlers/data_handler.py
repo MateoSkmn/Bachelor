@@ -4,7 +4,7 @@ import pandas as pd
 ######
 
 def get_records():
-    ''' Return all the record names and if they have a model '''
+    ''' Return all the record names and if they have a model attached to them'''
     record_list = []
     connections_df = pd.read_csv('BE/data/userInfo/connections.csv')
     for file_name in __allFileNamesSorted('BE/data/record'):
@@ -30,6 +30,9 @@ def get_model_by_record_connection(record: str):
 
     Parameter:
         record (str): Name of the record to search for
+    
+    Returns:
+        The connected model name. None if there is none
     '''
     connections_df = pd.read_csv('BE/data/userInfo/connections.csv')
     filtered_df = connections_df[connections_df['record'] == record]['model']
@@ -44,6 +47,9 @@ def get_record_by_model_connection(model: str):
     
     Parameter:
         model (str): Name of the model to search for
+    
+    Returns:
+        The connected record name. None if there is none
     '''
     connections_df = pd.read_csv('BE/data/userInfo/connections.csv')
     filtered_df = connections_df[connections_df['model'] == model]['record']
@@ -54,11 +60,14 @@ def get_record_by_model_connection(model: str):
 
 def get_user_data(file_name, id):
     '''
-    Returns the evaluation data for a given instance
+    Get the evaluation data for a given instance
     
     Parameters:
         file_name (str): Name of the evaluation file
-        id (str): id of the instance
+        id (str): ID of the instance
+    
+    Returns:
+        Two values for "understandable" and "prediction". Can be None if there are no values    
     '''
     path = 'BE/data/userInfo/evaluation/' + file_name
     evaluation_df = pd.read_csv(path)
@@ -74,6 +83,15 @@ def get_user_data(file_name, id):
 
 ### HELPER ###
 def __allFileNamesSorted(directory):
+    '''
+    Get all files sorted by upload date. Sorting by date is less confusing in the FE
+    
+    Parameters:
+        directory (str): Name of the directory to look through
+    
+    Returns:
+        List of file names
+    '''
     # Get all filenames in the directory with modification times
     file_names_with_mtime = []
     for root, _, files in os.walk(directory):

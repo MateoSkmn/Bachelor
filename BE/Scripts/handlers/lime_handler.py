@@ -15,6 +15,9 @@ def explanation(file_name, id):
     Parameters:
         file_name (str): Name of record
         id (str): ID of instance
+    
+    Returns:
+        Dictionary of data containing all needed values
     '''
     # Load saved model
     loaded_model: Pipeline = __load_model(file_name);
@@ -70,6 +73,12 @@ def explanation(file_name, id):
 def __calculate_lime_alpha_values(all_values):
     '''
     Calculates the adjusted value for all LIME values for easier access in FE
+
+    Parameter:
+        all_values (list): All LIME-values for each of the classifications
+
+    Returns:
+        List of words connected to the predicted classification and value 
     '''
     word_info = {}
     # Find the maximum value across all lists
@@ -99,7 +108,7 @@ def __load_model(file_name):
         file_name (str): record name
 
     Returns:
-        Object of loaded model; can be instantiated as Pipeline
+        Object of loaded model, should be instantiated as Pipeline
     '''
     model_name = data_handler.get_model_by_record_connection(file_name)
     file_path = 'BE/Data/Model/' + model_name

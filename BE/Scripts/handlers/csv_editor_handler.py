@@ -8,18 +8,19 @@ def find_csv_line_index(file_path, search_value):
     Find the index of a line in a CSV file based on column values.
 
     Parameters:
-        file_path (str): The path to the CSV file.
-        search_value (dict): A dictionary containing 'index' and 'value' key.
-                            'index' specifies the column index to search in.
-                            'value' specifies the value to search for in the column.
+        file_path (str): The path to the CSV file\n
+        search_value (dict): A dictionary containing 'index' and 'value' key:
+                            'index' specifies the column index to search in\n
+                            'value' specifies the value to search for in the column
 
     Returns:
-        int: The index of the line if found, -1 otherwise.
+        Integer of the index the line was found in, -1 otherwise.
     '''
     try:
         # Read the CSV file and search for the line index
         with open(file_path, 'r', newline='') as file:
             reader = csv.reader(file)
+            # Go through text of the file trying to find a line that fits
             for idx, row in enumerate(reader):
                 if row[search_value['index']] == search_value['value']:
                     return idx
@@ -30,14 +31,17 @@ def find_csv_line_index(file_path, search_value):
 
 def edit_csv_line(file_path, search_value, new_data):
     '''
-    Edit line in CSV file based on column values.
+    Edit a line of a CSV file
 
     Parameters:
-        file_path (str): The path to the CSV file.
-        search_value (dict): A dictionary containing 'index' and 'value' key.
-                            'index' specifies the column index to search in.
-                            'value' specifies the value to search for in the column.
+        file_path (str): The path to the CSV file\n
+        search_value (dict): A dictionary containing 'index' and 'value' key:
+                            'index' specifies the column index to search in\n
+                            'value' specifies the value to search for in the column
         new_data (list): The new data to replace the line with.
+    
+    Returns:
+        Response to indicate success
     '''
     line_index = find_csv_line_index(file_path, search_value)
     if line_index != -1:
@@ -47,12 +51,15 @@ def edit_csv_line(file_path, search_value, new_data):
 
 def edit_csv_line_by_index(file_path, line_index, new_data):
     '''
-    Edit a specific line in a CSV file based on its index.
+    Edit line in a CSV file based on its index.
 
     Parameters:
-        file_path (str): The path to the CSV file.
-        line_index (int): The index of the line to edit.
-        new_data (list): The new data to replace the line with.
+        file_path (str): The path to a CSV file
+        line_index (int): The index of the line to be edited
+        new_data (list): The new data to replace the line with
+    
+    Return:
+        Response to indicate success
     '''
     try:
         # Read the existing CSV file
@@ -78,9 +85,6 @@ def edit_csv_line_by_index(file_path, line_index, new_data):
     except PermissionError:
         print('Error: Permission denied to read/write the file.')
         return Response(False, 403, 'Permission denied to read/write the file.')
-    except IOError:
-        print('Error: Unable to read/write the file.')
-        return Response(False, 500, "Unable to read/write the file.")
     except Exception as e:
         print(f'Error: {e}')
         return Response(False, 500, 'An unexpected error occurred.')
@@ -92,25 +96,31 @@ def add_csv_line(file_path, data):
     Parameters:
         file_path (str): The path to the CSV file.
         data (list): The data to add as a new line.
+    
+    Returns:
+        Response to indicate success
     '''
     try:
-        # Append data as a new line to the CSV file
+        # Append (a) data to csv file
         with open(file_path, 'a', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(data)
         return Response(True, 200, 'Added line to csv')
-    except IOError:
-        return Response(True, 404, 'Error: File not found.')
+    except Exception as e:
+        return Response(False, 500, f'Unexpected error occured: {e}')
 
 def remove_csv_line(file_path, search_value):
     '''
-    Remove a specific line from a CSV file based on column values.
+    Remove line from a CSV file based on column values.
 
     Parameters:
-        file_path (str): The path to the CSV file.
+        file_path (str): The path to a CSV file.
         search_value (dict): A dictionary containing 'index' and 'value' key.
                             'index' specifies the column index to search in.
                             'value' specifies the value to search for in the column.
+    
+    Returns:
+        Response to indicate success
     '''
     line_index = find_csv_line_index(file_path, search_value)
     if line_index != -1:
@@ -120,11 +130,14 @@ def remove_csv_line(file_path, search_value):
 
 def remove_csv_line_by_index(file_path, line_index):
     '''
-    Remove a specific line from a CSV file based on its index.
+    Removes a line from a CSV file based on its index.
 
     Parameters:
-        file_path (str): The path to the CSV file.
-        line_index (int): The index of the line to remove.
+        file_path (str): The path to a CSV file
+        line_index (int): The index of the line that should be removed
+    
+    Returns:
+        Respone to indicate success
     '''
     try:
         # Read the existing CSV file
@@ -143,36 +156,36 @@ def remove_csv_line_by_index(file_path, line_index):
 
             return Response(True, 200, 'Connection deleted.')
         else:
-            return Response(True, 400, 'Line index is out of range.')
-    except IOError:
-        return Response(True, 404, 'Error: File not found.')
+            return Response(False, 400, 'Line index is out of range.')
+    except Exception as e:
+        return Response(False, 500, f'Unexpected error: {e}')
     
 def clear_csv(file_path):
     '''
-    Delete all entries in a CSV file except the header
+    Delete all entries in a CSV file, keeps the header
 
     Parameters:
-        file_path (str): The path to the CSV file.
-        line_index (int): The index of the line to remove (0-indexed).
+        file_path (str): The path to a CSV file
+        line_index (int): The index of the line to remove
 
     Returns:
-        True for successful operation, False otherwise
+        True when successful, False otherwise
     '''
     try:
         # Read the existing CSV file
         with open(file_path, 'r', newline='') as file:
             lines = list(csv.reader(file))
         
-        # Remove all lines except at index 0
+        # Remember the header for later
         lines = [lines[0]]
 
-        # Write the updated data back to the CSV file
+        # Write header back into the file, removing everything else
         with open(file_path, 'w', newline='') as file:
             writer = csv.writer(file)
             writer.writerows(lines)
 
         return True
 
-    except IOError:
-        print('Error: File not found or unable to read/write.')
+    except Exception as e:
+        print(f'Unexpected Error: {e}')
         return False

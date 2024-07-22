@@ -6,9 +6,6 @@
         <label for="randomSelect">Datensatz:</label>
         <br/>
         <select id="randomSelect" [(ngModel)]="recordName" (ngModelChange)="onSelectChange($event)">
-            @if (!recordList || recordList.length == 0) {
-                <option value="empty">Leer</option>
-            }
             @for (item of recordList; track item;) {
                 <option (value)="item.file_name">{{ item.file_name }}</option>
             }

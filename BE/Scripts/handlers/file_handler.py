@@ -13,6 +13,9 @@ def delete_file(directory, filename):
     Parameters:
         directory (str): name of the directory => 'BE/data/record' or 'BE/data/model'
         filename (str): name of the file
+
+    Returns:
+        Response to show if the request was successfull, un
     '''
     file_path = os.path.join(directory, filename)
 
@@ -32,8 +35,6 @@ def delete_file(directory, filename):
         return Response(True, 200, f"{filename} has been deleted successfully.")
     except FileNotFoundError:
         return Response(False, 404, f"File {filename} not found in directory {directory}.")
-    except PermissionError:
-        return Response(False, 403, f"Permission denied to delete {filename}.")
     except Exception as e:
         return Response(False, 400, f"An error occurred: {e}")
     
@@ -43,7 +44,10 @@ def upload_file(app, folder):
 
     Parameters:
         app (Flask): Access to Flask
-        folder (str): 
+        folder (str): Folder name
+    
+    Returns:
+        Response to indicate success
     '''
     if 'file' not in request.files:
         return Response(False, 400, 'No file part')
@@ -52,13 +56,16 @@ def upload_file(app, folder):
     if file.filename == '':
         return Response(False, 400, 'No selected file')
 
-    # Create directory if it doesn't exist
-    directory = os.path.join(app.root_path, folder)
-    if not os.path.exists(directory):
-        os.makedirs(directory)
-    # Save the file
-    file_path = os.path.join(directory, file.filename)
-    file.save(file_path)
+    try:
+        # Create directory if it doesnt exist
+        directory = os.path.join(app.root_path, folder)
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+        # Save the file
+        file_path = os.path.join(directory, file.filename)
+        file.save(file_path)
+    except Exception as e:
+        return Response(False, 400, f"An error occurred: {e}")
 
     # Create Evaluation csv file for records
     if folder == '../data/record':
@@ -74,6 +81,9 @@ def edit_connection(data):
 
     Parameter:
         data (list): String list in form of [record_name, model_name]
+    
+    Returns:
+        Response to indicate success
     '''
     path = 'BE/Data/UserInfo/connections.csv'
     search_value = {'index': 1, 'value': data[1]}

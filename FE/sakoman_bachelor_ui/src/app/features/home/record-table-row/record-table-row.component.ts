@@ -20,7 +20,7 @@ export class RecordTableRowComponent implements OnDestroy {
 
   private deleteSubscription!: Subscription;
 
-  constructor(private apiService: ApiService, private router: Router, private errorService: ErrorService) {}
+  constructor(private apiService: ApiService, private errorService: ErrorService) {}
 
   //Unsubscribe when no longer used
   ngOnDestroy(): void {

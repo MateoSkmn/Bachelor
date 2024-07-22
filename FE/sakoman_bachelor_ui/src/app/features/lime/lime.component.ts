@@ -171,7 +171,8 @@ export class LimeComponent implements OnInit, OnDestroy{
   }
 
   /**
-   * Marks the words from the LIME explanation with different colors based on the predicted label
+   * Marks the words from the LIME explanation with different colors based on the predicted label.
+   * This comes with the drawback that there is no difference between the same word with different meanings!
    * @param text Instance of selected text
    * @param limeValues LIME explanation values
    * @returns Formatted text with colored words as SafeHtml
@@ -194,10 +195,6 @@ export class LimeComponent implements OnInit, OnDestroy{
       const found = limeValues.find((value) => value.word.toLowerCase() === word.toLowerCase());
       if (found) {
         let alpha = found.value;
-        //UX: easier visualization by removing those that are to difficult to see
-        if (alpha < 0.001) {
-          alpha = 0;
-        }
         const color = colorMap[found.index].replace('ALPHA', alpha.toString());
         coloredText += `<span style="background-color: ${color}">${word}</span>`;
       } else {
